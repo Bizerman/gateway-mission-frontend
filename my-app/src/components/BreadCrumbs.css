@@ -1,0 +1,44 @@
+:root {
+  --active_color: black;
+  --additional_color: gray;
+}
+
+.breadcrumbs {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  padding: 41px;
+}
+
+.breadcrumbs * {
+  color: black;
+  font-family: "Play", sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.breadcrumbs li {
+  position: relative;
+  cursor: pointer;
+}
+
+.breadcrumbs li:last-child {
+  color: var(--active_color);
+}
+
+.breadcrumbs a {
+  font-weight: normal;
+  text-decoration: none; /* Убираем стандартное подчеркивание */
+  color: black; /* Устанавливаем стандартный цвет для ссылки */
+  border-bottom: 2px dotted #000; /* Начальное прозрачное пунктирное подчеркивание */
+}
+
+.breadcrumbs a:hover {
+  color: var(--active_color); /* Цвет текста при ховере */
+  border-bottom: 2px dotted transparent; /* Пунктирное подчеркивание при ховере */
+}
+
+.breadcrumbs .slash {
+  color: var(--additional_color); /* Цвет для разделителей */
+}
+

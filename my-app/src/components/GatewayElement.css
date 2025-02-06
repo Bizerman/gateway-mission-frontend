@@ -1,0 +1,80 @@
+.element {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.element-image{
+  width: 310px;
+  height: 232px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  object-fit: cover;
+}
+.element-name {
+  width: 100%;
+  color: rgba(0,0,0,1);
+  font-family: "Play",sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: left;
+}
+.element-description {
+  width: 100%;
+  color: rgba(0,0,0,1);
+  font-family: Play,sans-serif;
+  font-weight: normal;
+  font-size: 16px;
+  text-align: left;
+}
+.element-learn-more-btn{
+  width: max-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.learn-more-btn-text{
+  width: auto;
+  text-decoration: none;
+  color: rgba(0,0,0,1);
+  font-family: Play,sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: left;
+}
+.learn-more-btn-element{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width:16.3px;
+  height:18px;
+  border-radius:500px;
+  background-color:rgba(246, 65, 55, 1);
+}
+.learn-more-btn-element-arrow{
+  width: 7.24px;
+  height: 1px;
+  background: #ffffff;
+  position: absolute;
+  z-index: 1;
+}
+.learn-more-btn-element-arrow-2{
+  display: inline-block;
+  transition: 1s;
+  width: 3.5px;
+  height: 3.5px;
+  margin-left: 2px;
+  transform: rotate(45deg);
+  border-top: 1px solid #ffffff !important;
+  border-right: 1px solid #ffffff !important;
+  position: absolute;
+  z-index: 2;
+}
+.learn-more-btn-element-ellipse{
+  border-radius:500px;
+  background-color:rgba(246, 65, 55, 1);
+  width:16.3px;
+  height:18px;
+}

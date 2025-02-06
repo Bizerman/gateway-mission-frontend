@@ -1,0 +1,81 @@
+a{
+  text-decoration: none!important;
+}
+.gateway-products-page-content{
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 140px;
+  margin-bottom: 100px;
+  gap: 100px
+}
+.content-head{
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+.orders-search{
+  display: flex;
+  flex-direction: row;
+  gap: 1065px;
+  width: 100%;
+  height: 55px;
+
+}
+.products {
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 310px 310px 310px;
+  row-gap: 43px;
+  column-gap: 158px;
+}
+.txt{
+  display: block;
+  position: absolute;
+  left: 0;
+  font-size: larger;
+  width: 100%;
+  text-align: center;
+}
+.missions-passive {
+  width: 55px;
+  height: 55px;
+  opacity: 0.9399999976158142;
+  background: rgba(255,255,255,1);
+  border: 2px solid rgba(0,0,0,1);
+  border-radius: 10px;
+}
+.missions-inside{
+  width: 48px;
+  height: 30px;
+  display: flex;
+  align-items: baseline;
+  margin-top: 13px;
+  margin-left: 3px;
+
+}
+.missions-image {
+  width: 31px;
+  height: 28px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  opacity: 0.8399999737739563;
+}
+.missions-quantity
+{
+  color: rgba(0,0,0,1);
+  opacity: 0.84;
+  font-family: Play,sans-serif;
+  font-weight: bold;
+  font-size: 13px;
+  text-align: left;
+}
+.gateway-products-title {
+  color: rgba(0,0,0,1);
+  font-family: Play,sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+}
