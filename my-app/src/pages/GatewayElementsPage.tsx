@@ -11,7 +11,7 @@ const GatewayElementsPage: FC = () => {
     const [searchValue, setSearchValue] = useState('')
     const handleSearch = async () => {
         setLoading(true);
-        const { elements } = await getGatewayElements(); // Получаем "elements" вместо "results"
+        const { elements } = await getGatewayElements();
         setElements(
             elements.filter(item =>
                 item.title.toLowerCase().includes(searchValue.toLowerCase())
