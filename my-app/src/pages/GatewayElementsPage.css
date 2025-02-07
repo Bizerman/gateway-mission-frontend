@@ -36,6 +36,7 @@ a{
   display: block;
   position: absolute;
   left: 0;
+  color: black;
   font-size: larger;
   width: 100%;
   text-align: center;

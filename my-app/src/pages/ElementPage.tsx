@@ -30,7 +30,7 @@ const ElementPage: FC = () => {
             });
     }, [id]);
 
-    if (loading) return <h2 className="d-flex justify-content-center align-items-center vw-100">Загрузка...</h2>;
+    if (loading) return <h2 className="d-flex justify-content-center align-items-center vw-100 ">Загрузка...</h2>;
     if (error) return <h2 className="d-flex justify-content-center align-items-center vw-100">{error}</h2>;
     if (!element) return <h2 className="d-flex justify-content-center align-items-center vw-100">Данные отсутствуют</h2>;
 

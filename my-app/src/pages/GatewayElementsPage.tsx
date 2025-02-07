@@ -1,14 +1,18 @@
 import {FC, useEffect, useState} from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setSearchQuery } from "../store/slices/filterSlice.ts";
 import {GatewayElement,getGatewayElements} from "../modules/GatewayMissionApi.ts";
 import GatewayCard from "../components/GatewayElement.tsx";
 import "./GatewayElementsPage.css"
 import ElementSearchBar from "../components/ElementSearchBar.tsx";
+import {RootState} from "../store/store.ts";
 
 const GatewayElementsPage: FC = () => {
     const [elements, setElements] = useState<GatewayElement[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [searchValue, setSearchValue] = useState('')
+    const searchValue = useSelector((state: RootState) => state.filter.searchQuery);
+    const dispatch = useDispatch();
     const handleSearch = async () => {
         setLoading(true);
         const { elements } = await getGatewayElements();
@@ -37,10 +41,11 @@ const GatewayElementsPage: FC = () => {
                 <div className="orders-search">
                     <ElementSearchBar
                         value={searchValue}
-                        setValue={setSearchValue}
-                        onSubmit={handleSearch} // передаем функцию поиска
+                        setValue={(value: string) => dispatch(setSearchQuery(value))}
+                        onSubmit={handleSearch}
                         placeholder="НАЙТИ..."
                     />
+
                     {/*{% if data.mission %}*/}
                     {/*    <a href='' >*/}
                     {/*        <div className="missions-active">*/}
