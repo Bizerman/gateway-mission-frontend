@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
+
+.body{
+    background-image: url('http://127.0.0.1:9000/img-for-rip/images/HomeImage.png'); /* Путь к изображению */
+    background-position: center; /* Центрируем изображение */
+    background-repeat: no-repeat; /* Отключаем повторение */
+    background-size: cover; /* Обрезает изображение, сохраняя пропорции */
+    position: fixed; /* Фиксируем фон */
+    display: flex;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Черный с 50% прозрачностью */
+  z-index: -1; /* Убедись, что затемняющий слой находится поверх фона */
+}
+.texts{
+    gap: 41px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.main-text{
+    font-family: 'Play', sans-serif;
+    font-weight: bold;
+    font-size: 80px;
+    color: white;
+    line-height: 1.2;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+}
+.secondary-text{
+    font-family: 'Play', sans-serif;
+    font-size: 22px;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 1100px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.box-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 329px;
+    height: 100%;
+    padding: 20px 40px;  /* Можно настроить отступы внутри боксов */
+    background-color: rgba(255, 255, 255, 0.12);  /* Белая заливка с 12% прозрачностью */
+    border-radius: 20px;  /* Скругление углов */
+    border: 1px solid white;  /* Белая обводка */
+    margin: 10px;  /* Отступы между блоками */
+    font-family: 'Play', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    text-decoration: none; /* Убирает подчеркивание у ссылок */
+    transition: background-color 0.3s ease; /* Для плавного изменения фона при наведении */
+}
+
+.box-link:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* При наведении фон становится немного темнее */
+    color: white;
+}
