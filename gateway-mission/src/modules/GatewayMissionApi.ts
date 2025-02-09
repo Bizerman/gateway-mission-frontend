@@ -15,7 +15,7 @@ export interface GatewayElementsResult {
   draft_element_count: number;
 }
 
-const API_URL = "http://localhost:8000/gatewayels_list/"; // Используем правильный URL
+const API_URL = "http://192.168.1.20:8000/gatewayels_list/"; // Используем правильный URL
 
 // Функция запроса к API с fallback на mock-данные
 export const getGatewayElements = async (): Promise<GatewayElementsResult> => {
