@@ -89,6 +89,7 @@ a {
   font-family: Play, sans-serif;
   font-weight: bold;
   font-size: clamp(24px, 4vw, 36px);
+  margin-top: 40px;
 }
 
 @media (max-width: 1390px) {
