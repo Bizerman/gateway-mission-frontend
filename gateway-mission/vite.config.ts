@@ -1,12 +1,22 @@
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import mkcert from 'vite-plugin-mkcert'
+import fs from 'fs'
+import path from 'path'
 
 export default defineConfig({
-  base: '/gateway-mission-frontend',  // Устанавливает базовый путь
+  base: '/gateway-mission-frontend',
   server: {
-    open: '/gateway-mission-frontend/', // Автоматически открывает страницу в браузере
+    open: '/gateway-mission-frontend/',
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'cert.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'cert.crt')),
+    },
   },
   plugins: [
+    react(),
+    mkcert(),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
