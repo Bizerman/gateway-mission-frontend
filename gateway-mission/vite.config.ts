@@ -8,11 +8,13 @@ import path from 'path'
 export default defineConfig({
   base: '/gateway-mission-frontend',
   server: {
-    open: '/gateway-mission-frontend/',
+    open: '/gateway-mission-frontend',
     https: {
       key: fs.readFileSync(path.resolve(__dirname, 'cert.key')),
       cert: fs.readFileSync(path.resolve(__dirname, 'cert.crt')),
     },
+    port: 3000,
+    host:'0.0.0.0',
   },
   plugins: [
     react(),
@@ -23,8 +25,8 @@ export default defineConfig({
         enabled: true,
       },
       manifest: {
-        name: "Tile Notes",
-        short_name: "Tile Notes",
+        name: "GatewayMission",
+        short_name: "GM",
         start_url: "/gateway-mission-frontend/",
         scope: "/gateway-mission-frontend/",
         display: "standalone",

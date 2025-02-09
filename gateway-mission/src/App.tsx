@@ -5,8 +5,23 @@ import HomePage from "./pages/HomePage.tsx";
 import Navigation from "./components/Navigation.tsx";
 import GatewayElementsPage from "./pages/GatewayElementsPage.tsx";
 import ElementPage from "./pages/ElementPage.tsx";
+import {useEffect} from "react";
+import {invoke} from "@tauri-apps/api/core";
+
+
 
 function App() {
+    useEffect(()=>{
+        invoke('tauri', {cmd: 'create'})
+            .then((response: any) => console.log(response))
+            .catch((error: any) => console.log(error));
+
+        return() => {
+            invoke('tauri', {cmd: 'close'})
+                .then((response: any) => console.log(response))
+                .catch((error: any) => console.log(error));
+        }
+    }, []);
   return (
     <BrowserRouter basename="/gateway-mission-frontend">
       <Navigation/>

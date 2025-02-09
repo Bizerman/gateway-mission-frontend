@@ -6,6 +6,7 @@ import App from './App.tsx';
 import { store } from './store/store';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
