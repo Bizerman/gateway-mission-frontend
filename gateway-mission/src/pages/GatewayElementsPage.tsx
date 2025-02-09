@@ -6,12 +6,15 @@ import GatewayCard from "../components/GatewayElement.tsx";
 import "./GatewayElementsPage.css"
 import ElementSearchBar from "../components/ElementSearchBar.tsx";
 import {RootState} from "../store/store.ts";
+import Rocket_img from "../assets/rocket.png"
+
 
 const GatewayElementsPage: FC = () => {
     const [elements, setElements] = useState<GatewayElement[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const searchValue = useSelector((state: RootState) => state.filter.searchQuery);
+    const missionsImage = Rocket_img ? Rocket_img : "http://127.0.0.1:9000/img-for-rip/images/rocket.png";
     const dispatch = useDispatch();
     const handleSearch = async () => {
         setLoading(true);
@@ -58,7 +61,7 @@ const GatewayElementsPage: FC = () => {
                     {/*{% else  %}*/}
                     <div className="missions-passive">
                         <div className="missions-inside">
-                            <img src="http://127.0.0.1:9000/img-for-rip/images/rocket.png" className="missions-image"></img>
+                            <img src={missionsImage} alt="Missions"  className="missions-image"></img>
                             <span className="missions-quantity">(0)</span>
                         </div>
                     </div>

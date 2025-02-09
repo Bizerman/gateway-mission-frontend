@@ -21,7 +21,7 @@ input[type="text"]{
   text-align: left;
   background: rgba(255,255,255,1);
   border: 1px solid rgba(0,0,0,1);
-  background-image: url("http://127.0.0.1:9000/img-for-rip/images/search.png");
+  background-image: url("http://127.0.0.1:9000/img-for-rip/images/search.png"),url("../assets/search.png");
   background-size: 40px 42px;
   background-position: 6px 6.5px;
   background-repeat: no-repeat;
