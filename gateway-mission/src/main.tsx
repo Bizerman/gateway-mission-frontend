@@ -1,21 +1,15 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ROUTES } from "../Routes";
-import HomePage from "./pages/HomePage.tsx";
-import Navigation from "./components/Navigation.tsx";
-import GatewayElementsPage from "./pages/GatewayElementsPage.tsx";
-import ElementPage from "./pages/ElementPage.tsx";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import './index.css';
+import App from './App.tsx';
+import { store } from './store/store';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
-function App() {
-  return (
-    <BrowserRouter basename="/gateway-mission-frontend">
-      <Navigation/>
-      <Routes>
-        <Route path={ROUTES.HOME} index element={<HomePage />} />
-        <Route path={ROUTES.GATEWAY_ELEMENTS} element={<GatewayElementsPage />} />
-        <Route path={ROUTES.GATEWAY_ELEMENT_DETAIL} element={<ElementPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
-
-export default App;
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>,
+);

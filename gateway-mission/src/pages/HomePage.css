@@ -16,6 +16,9 @@
     padding: 0;
     overflow: hidden;
 }
+.body::before{
+  background-color: rgb(0 0 0) !important;
+}
 .body::before {
   content: '';
   position: absolute;
