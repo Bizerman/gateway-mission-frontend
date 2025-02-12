@@ -56,6 +56,17 @@ a {
   border: 2px solid rgba(0,0,0,1);
   border-radius: 10px;
 }
+.missions-active{
+  width: 55px;
+  height: 55px;
+  opacity: 0.9399999976158142;
+  background: rgba(255,255,255,1);
+  border: 2px solid rgba(0,0,0,1);
+  border-radius: 10px;
+}
+.missions-active:hover {
+  border: 2px solid rgb(246, 65, 55); /* Цвет бордера при ховере */
+}
 
 .missions-inside{
   width: 48px;

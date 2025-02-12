@@ -6,10 +6,11 @@ import GatewayCard from "../../components/GatewayElement.tsx";
 import "./GatewayElementsPage.css";
 import ElementSearchBar from "../../components/ElementSearchBar.tsx";
 import Rocket_img from "../../assets/rocket.png";
+import { Link } from "react-router-dom"; // Для навигации по ссылке
 
 const GatewayElementsPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { elements = [], searchValue = '', loading, error } = useSelector((state: RootState) => state.gateway || {});
+  const { elements = [], searchValue = '', loading, error, draft_mission_id, draft_element_count } = useSelector((state: RootState) => state.gateway || {});
 
   const missionsImage = Rocket_img || "http://127.0.0.1:9000/img-for-rip/images/rocket.png";
 
@@ -20,6 +21,7 @@ const GatewayElementsPage: FC = () => {
   const handleSearch = () => {
     dispatch(getGatewayElementsList());
   };
+
   return (
     <div className="gateway-products-page-content">
       <div className="content-head">
@@ -31,12 +33,24 @@ const GatewayElementsPage: FC = () => {
             onSubmit={handleSearch}
             placeholder="НАЙТИ..."
           />
-          <div className="missions-passive">
-            <div className="missions-inside">
-              <img src={missionsImage} alt="Missions" className="missions-image" />
-              <span className="missions-quantity">(0)</span>
+          {/* Логика для отображения активной или пассивной миссии */}
+          {draft_mission_id ? (
+            <Link to={`/gateway/mission/${draft_mission_id}`}>
+              <div className="missions-active">
+                <div className="missions-inside">
+                  <img src={missionsImage} alt="Missions" className="missions-image" />
+                  <span className="missions-quantity">({draft_element_count})</span>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className="missions-passive">
+              <div className="missions-inside">
+                <img src={missionsImage} alt="Missions" className="missions-image" />
+                <span className="missions-quantity">({draft_element_count})</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
