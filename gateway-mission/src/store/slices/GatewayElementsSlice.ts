@@ -27,7 +27,7 @@ export const getGatewayElementsList = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.gatewayelsList.gatewayelsListList();
-      return response.data.elements;
+      return response.data;
     } catch (error) {
       console.error("Ошибка при получении данных: ", error);
       // Отправляем ошибку с сообщением в payload
@@ -73,13 +73,15 @@ const gatewayElementsSlice = createSlice({
           })
           .addCase(getGatewayElementsList.fulfilled, (state, action) => {
             state.loading = false;
+            state.draft_element_count = action.payload.draft_element_count
+              state.draft_mission_id = action.payload.draft_mission_id
             // Применяем фильтрацию на основе searchValue
             if (state.searchValue) {
-              state.elements = action.payload.filter((element: GatewayElement) =>
+              state.elements = action.payload.elements.filter((element: GatewayElement) =>
                 (element.title && element.title.toLowerCase().includes(state.searchValue.toLowerCase()))
               );
             } else {
-              state.elements = action.payload;  // Если поисковое значение пустое, показываем все элементы
+              state.elements = action.payload.elements;  // Если поисковое значение пустое, показываем все элементы
             }
           })
           .addCase(getGatewayElementsList.rejected, (state, action) => {

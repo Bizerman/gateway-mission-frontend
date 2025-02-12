@@ -31,18 +31,15 @@ export const loginUserAsync = createAsyncThunk<LoginResponse, { email: string; p
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await api.user.userLoginCreate({ email, password }, { withCredentials: true });
-
       if (!response || !response.data) {
         return rejectWithValue('Ошибка авторизации');
       }
-
       // Сохраняем данные пользователя в localStorage
       localStorage.setItem('email', email);
       localStorage.setItem('password', password); // Если необходимо сохранять пароль
       localStorage.setItem('username', response.data.user_data.username);
       localStorage.setItem('role', String(response.data.user_data.role));
       localStorage.setItem('token', String(response.data.user_data.token));
-
       return response.data; // Возвращаем данные о пользователе
     } catch (error) {
       return rejectWithValue('Ошибка авторизации');

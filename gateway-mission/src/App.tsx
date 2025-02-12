@@ -8,6 +8,8 @@ import ElementPage from "./pages/ElementPage/ElementPage.tsx";
 import {useEffect} from "react";
 import {invoke} from "@tauri-apps/api/core";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import DraftMissionPage from "./pages/DraftMissionPage/DraftMissionPage.tsx";
+import MissionsPage from "./pages/MissionsPage/MissionsPage.tsx";
 
 
 
@@ -30,6 +32,8 @@ function App() {
         <Route path={ROUTES.HOME} index element={<HomePage />} />
         <Route path={ROUTES.GATEWAY_ELEMENTS} element={<GatewayElementsPage />} />
         <Route path={ROUTES.GATEWAY_ELEMENT_DETAIL} element={<ElementPage />} />
+        <Route path={ROUTES.MISSION} element={<DraftMissionPage />} />
+        <Route path={ROUTES.MISSIONS} element={<MissionsPage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />}/>
       </Routes>
     </BrowserRouter>

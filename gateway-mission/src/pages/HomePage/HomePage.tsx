@@ -15,9 +15,9 @@ const HomePage: FC = () => {
                     <Link to={ROUTES.GATEWAY_ELEMENTS} className="box-link">
                         <span>Модули и корабли</span>
                     </Link>
-                    {/*<Link to={ROUTES.GATEWAY_ELEMENTS} className="box-link">*/}
-                    {/*    <span>Миссии</span>*/}
-                    {/*</Link>*/}
+                    <Link to={ROUTES.MISSIONS} className="box-link">
+                        <span>Миссии</span>
+                    </Link>
                 </div>
             </Col>
         </div>

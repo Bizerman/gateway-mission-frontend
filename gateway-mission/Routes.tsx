@@ -3,7 +3,7 @@ export const ROUTES = {
   GATEWAY_ELEMENTS: "/elements",
   GATEWAY_ELEMENT_DETAIL: "/element/:element_id",
   ADD_TO_MISSION: "/gatewayel/:element_id/addtomission",
-  MISSION: "/mission",
+  MISSION: "/mission/:mission_id",
   MISSIONS: "/missions/",
   LOGIN: "/login",
   PROFILE: "/profile",

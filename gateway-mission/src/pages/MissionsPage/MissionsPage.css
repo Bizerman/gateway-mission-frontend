@@ -1,0 +1,80 @@
+.missions-page-box{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+
+.missions-content-box{
+
+}
+.missions-content-header{
+    display: flex;
+    flex-direction: row;
+
+}
+.missions-page-box {
+  padding: 20px;
+}
+
+
+.missions-content-box {
+  margin-top: 20px;
+}
+
+.missions-content-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.missions-status-filter,
+.missions-form-data-filter,
+.missions-complete-data-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
+  font-size: 14px;
+}
+
+select, input[type="date"] {
+  padding: 5px;
+  width: 150px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.missions-table {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #e0e0e0;
+}
+

@@ -106,6 +106,28 @@ export interface GatewayMission {
   addition?: string | null;
   elements?: GatewayElementMission[];
 }
+export interface MissionPayload {
+  mission: {
+    id: number;
+    mission_name: string | null;
+    plan_date: string | null;
+    status: 'Введена' | 'В процессе' | 'Завершена'; // Статус можно уточнить, если есть больше значений
+    create_datetime: string;
+    form_datetime: string | null;
+    complete_datetime: string | null;
+    moderator: string | null;
+    creator: string;
+    addition: string | null;
+  };
+  elements: {
+    id: number;
+    title: string;
+    short_description: string;
+    status: boolean;
+    img_url: string;
+    full_description: string;
+  }[];
+}
 
 export interface GatewayMissionAddition {
   /** Название миссии */
@@ -188,6 +210,36 @@ export interface UserRegistration {
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
+import Cookies from 'js-cookie'; // Используем js-cookie для получения CSRF токена из cookie
+
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common['X-CSRFToken'] = Cookies.get('csrftoken');
+axios.interceptors.request.use((config) => {
+  const csrfToken = Cookies.get('csrftoken'); // Получаем новый CSRF токен из cookies
+  console.log("Это токен из интерцептора", csrfToken);
+  if (csrfToken) {
+    config.headers['X-CSRFToken'] = csrfToken; // Добавляем токен в заголовки каждого запроса
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+// Обновление CSRF токена
+export const updateCsrfToken = () => {
+  const csrfToken = Cookies.get('csrftoken');
+
+  if (csrfToken) {
+    if (axios.defaults.headers.common['X-CSRFToken'] !== csrfToken) {
+      axios.defaults.headers.common['X-CSRFToken'] = csrfToken;
+      console.log('Токен обновлен:', csrfToken);
+    } else {
+      console.log('Токен не обновился, текущий:', csrfToken);
+    }
+  } else {
+    console.error('CSRF токен отсутствует!');
+  }
+}
 
 export type QueryParamsType = Record<string | number, any>;
 
@@ -485,7 +537,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     missionRead: (id: string, params: RequestParams = {}) =>
-      this.request<GatewayMission, any>({
+      this.request<MissionPayload, any>({
         path: `/mission/${id}/`,
         method: "GET",
         secure: true,

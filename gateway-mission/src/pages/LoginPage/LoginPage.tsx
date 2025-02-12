@@ -6,6 +6,7 @@ import { loginUserAsync } from '../../store/slices/userSlice';
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from '../../../Routes';
 import Navigation from "../../components/Navigation.tsx";
+import {updateCsrfToken} from "../../api/Api.ts";
 
 const LoginPage: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -31,6 +32,7 @@ const LoginPage: React.FC = () => {
             console.log('Ошибка авторизации:', resultAction.payload);
             // Можно тут вывести ошибку на экран или выполнить другие действия
         } else {
+            await updateCsrfToken();
             // Авторизация успешна, выполняем переход
             navigate(`${ROUTES.GATEWAY_ELEMENTS}`); // Переход на страницу услуг
         }
