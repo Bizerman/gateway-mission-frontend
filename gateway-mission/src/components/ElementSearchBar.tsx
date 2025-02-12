@@ -1,5 +1,8 @@
 import { FC } from 'react';
 import './ElementSearchBar.css';
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../store/store.ts";
+import {setSearchValue} from "../store/slices/GatewayElementsSlice.ts";
 
 interface Props {
     value: string;
@@ -10,10 +13,11 @@ interface Props {
     buttonTitle?: string;
 }
 
-const ElementSearchBar: FC<Props> = ({ value, setValue, onSubmit, placeholder }) => {
+const ElementSearchBar: FC<Props> = ({ value, onSubmit, placeholder }) => {
+    const dispatch = useDispatch<AppDispatch>();
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            onSubmit(); // вызов функции поиска при нажатии Enter
+            onSubmit();
         }
     };
 
@@ -23,8 +27,8 @@ const ElementSearchBar: FC<Props> = ({ value, setValue, onSubmit, placeholder })
                 type="text"
                 value={value}
                 placeholder={placeholder}
-                onChange={(event) => setValue(event.target.value)} // обновление значения при вводе
-                onKeyDown={handleKeyPress} // обработка нажатия клавиш
+                onChange={(event => dispatch(setSearchValue(event.target.value)))}
+                onKeyDown={handleKeyPress}
             />
         </div>
     );

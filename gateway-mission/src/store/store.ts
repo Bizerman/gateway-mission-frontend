@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import filterReducer from './slices/filterSlice';
+import gatewayReducer from './slices/GatewayElementsSlice.ts';
+import userReducer from "./slices/userSlice.ts";
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
-    filter: filterReducer,
+    gateway: gatewayReducer,
+    user: userReducer,
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export default store;

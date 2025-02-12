@@ -11,6 +11,36 @@
   background-size: cover;
   object-fit: cover;
 }
+.img-btn{
+  height: 249px;
+  display: flex;
+}
+.add-mission-btn{
+  display: flex;
+  position: absolute;
+  margin-left: 241px;
+  margin-top: 186px;
+  justify-content: center;
+  align-items: center;
+}
+.plus-img{
+  width: 24px;
+  height: 24px;
+  position: absolute;
+}
+.ellipse-1{
+  width: 58px;
+  height: 56px;
+  position: absolute;
+  background: rgba(246, 65, 55, 1);
+  border-radius: 50%;
+}
+.ellipse-2{
+  width: 64px;
+  height: 62px;
+  background: white;
+  border-radius: 50%;
+}
 .element-name {
   width: 100%;
   color: rgba(0,0,0,1);

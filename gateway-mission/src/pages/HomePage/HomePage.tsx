@@ -1,7 +1,7 @@
 import {FC} from "react";
 import { Col} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {ROUTES} from "../../Routes.tsx";
+import {ROUTES} from "../../../Routes.tsx";
 import "./HomePage.css"
 
 const HomePage: FC = () => {

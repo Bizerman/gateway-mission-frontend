@@ -26,3 +26,4 @@ dist-ssr
 /ca.key
 /cert.crt
 /cert.key
+/src-tauri/

@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
 .body {
-    background-image: url('http://127.0.0.1:9000/img-for-rip/images/HomeImage.png'),url('../assets/HomeImage.png');
+    background-image: url('http://127.0.0.1:9000/img-for-rip/images/HomeImage.png'),url('../../assets/HomeImage.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

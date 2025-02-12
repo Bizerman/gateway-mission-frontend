@@ -1,12 +1,13 @@
 import {registerSW} from "virtual:pwa-register";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ROUTES } from "../Routes";
-import HomePage from "./pages/HomePage.tsx";
+import HomePage from "./pages/HomePage/HomePage.tsx";
 import Navigation from "./components/Navigation.tsx";
-import GatewayElementsPage from "./pages/GatewayElementsPage.tsx";
-import ElementPage from "./pages/ElementPage.tsx";
+import GatewayElementsPage from "./pages/GatewayElementsPage/GatewayElementsPage.tsx";
+import ElementPage from "./pages/ElementPage/ElementPage.tsx";
 import {useEffect} from "react";
 import {invoke} from "@tauri-apps/api/core";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 
 
 
@@ -29,6 +30,7 @@ function App() {
         <Route path={ROUTES.HOME} index element={<HomePage />} />
         <Route path={ROUTES.GATEWAY_ELEMENTS} element={<GatewayElementsPage />} />
         <Route path={ROUTES.GATEWAY_ELEMENT_DETAIL} element={<ElementPage />} />
+        <Route path={ROUTES.LOGIN} element={<LoginPage />}/>
       </Routes>
     </BrowserRouter>
   );
