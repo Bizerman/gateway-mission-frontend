@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store"; // Путь может быть разным в зависимости от вашего проекта
 import { fetchMissions } from "../../store/slices/MissionDraftSlice"; // Импортируем экшен
 import './MissionsPage.css';
-import {useParams} from "react-router-dom";
 
 const MissionsPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();

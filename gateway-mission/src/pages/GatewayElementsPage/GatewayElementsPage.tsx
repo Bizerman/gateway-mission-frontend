@@ -24,7 +24,7 @@ const GatewayElementsPage: FC = () => {
       dispatch(getGatewayElementsList());
       dispatch(fetchMissionById(String(draft_mission_id)));
     }
-  }, [dispatch, draft_mission_id]);
+  }, [dispatch, draft_mission_id,draft_element_count]);
 
   const handleSearch = () => {
     dispatch(getGatewayElementsList());
