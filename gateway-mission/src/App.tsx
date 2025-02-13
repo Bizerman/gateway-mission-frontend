@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import DraftMissionPage from "./pages/MissionPage/DraftMissionPage.tsx";
 import MissionsPage from "./pages/MissionsPage/MissionsPage.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
+import ProfileUpdatePage from "./pages/ProfileUpdatePage/ProfileUpdatePage.tsx";
 
 
 
@@ -37,6 +38,7 @@ function App() {
         <Route path={ROUTES.MISSIONS} element={<MissionsPage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />}/>
         <Route path={ROUTES.REGISTER} element={<RegisterPage />}/>
+        <Route path={ROUTES.PROFILE} element={<ProfileUpdatePage />}/>
       </Routes>
     </BrowserRouter>
   );

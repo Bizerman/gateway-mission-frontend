@@ -1,0 +1,130 @@
+/* Основные стили */
+.edit-profile-page-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+.edit-profile-form-container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.edit-profile-title {
+  font-family: 'Play', sans-serif;
+  font-weight: bold;
+  font-size: clamp(24px, 5vw, 36px);
+  margin-bottom: 30px;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-family: 'Play', sans-serif;
+  font-size: 20px;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.7);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  background: white;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  width: 100%;
+}
+
+.form-group input:focus {
+  border-color: #e03e32; /* Подсветка поля при фокусе */
+  box-shadow: 0 0 5px rgba(224, 62, 50, 0.6); /* Легкая тень для подсветки */
+  outline: none;
+}
+
+.submit-btn {
+  background-color: #f64237 !important; /* Основной цвет кнопки */
+  border: none !important;
+  color: white !important;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #e03e32 !important; /* Цвет при наведении */
+}
+
+.submit-btn:disabled {
+  background-color: #cccccc; /* Цвет для неактивной кнопки */
+  cursor: not-allowed;
+}
+
+/* Стили для спиннера */
+.spinner-border {
+  margin-right: 8px;
+}
+
+/* Адаптивные стили */
+@media (max-width: 1024px) {
+  .edit-profile-form-container {
+    padding: 20px;
+  }
+  .edit-profile-title {
+    font-size: 30px;
+  }
+  .form-group input {
+    font-size: 14px;
+  }
+  .submit-btn {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .edit-profile-form-container {
+    padding: 15px;
+    width: 90%;
+  }
+  .edit-profile-title {
+    font-size: 24px;
+  }
+  .form-group input {
+    font-size: 12px;
+  }
+  .submit-btn {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-profile-form-container {
+    padding: 10px;
+  }
+  .edit-profile-title {
+    font-size: 20px;
+  }
+  .form-group input {
+    font-size: 12px;
+  }
+  .submit-btn {
+    font-size: 12px;
+  }
+}

@@ -7,6 +7,8 @@ interface UserState {
   email?: string | null;
   role: string;
   error?: string | null;
+  isLoading: boolean;
+  success: boolean;
   isAuthenticated: boolean;
 }
 
@@ -20,6 +22,8 @@ const initialState: UserState = {
   email: emailFromStorage || null,
   role: roleFronStorage || '',
   error: null,
+  isLoading: false,
+  success: false,
   isAuthenticated: tokenFromStorage ? true : false,
 };
 
@@ -139,13 +143,19 @@ export const userSlice = createSlice({
       .addCase(logoutUserAsync.rejected, (state, action) => {
         state.error = action.payload as string;
       })
-      .addCase(updateUserAsync.fulfilled, (state, action) => {
-        state.username = action.payload.username;
-        state.email = action.payload.email;
+      .addCase(updateUserAsync.pending, (state) => {
+        state.isLoading = true;
         state.error = null;
+        state.success = false;
+      })
+      .addCase(updateUserAsync.fulfilled, (state) => {
+        state.isLoading = false;
+        state.success = true;
       })
       .addCase(updateUserAsync.rejected, (state, action) => {
+        state.isLoading = false;
         state.error = action.payload as string;
+        state.success = false;
       });
   },
 });
