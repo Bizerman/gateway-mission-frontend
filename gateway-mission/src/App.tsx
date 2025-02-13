@@ -10,6 +10,7 @@ import {invoke} from "@tauri-apps/api/core";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import DraftMissionPage from "./pages/MissionPage/DraftMissionPage.tsx";
 import MissionsPage from "./pages/MissionsPage/MissionsPage.tsx";
+import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 
 
 
@@ -35,6 +36,7 @@ function App() {
         <Route path={ROUTES.MISSION} element={<DraftMissionPage />} />
         <Route path={ROUTES.MISSIONS} element={<MissionsPage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />}/>
+        <Route path={ROUTES.REGISTER} element={<RegisterPage />}/>
       </Routes>
     </BrowserRouter>
   );
