@@ -10,7 +10,7 @@ const Navigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { isAuthenticated,  username } = useSelector((state: RootState) => state.user);
+  const { isAuthenticated,  username,role } = useSelector((state: RootState) => state.user);
   const isHomePage = location.pathname === '/';
   const handleLogout = async () => {
     await dispatch(logoutUserAsync());
@@ -39,10 +39,11 @@ const Navigation = () => {
                         </div>
                     </>
                 ) : (
-                    <>
+                    <div className="usage-btns me-5">
                         <Link to={ROUTES.LOGIN} className="guest-text">Login</Link>
+                        <span className='guest-text'>|</span>
                         <Link to={ROUTES.REGISTER} className="guest-text">Register</Link>
-                    </>
+                    </div>
                 )}
             </div>
         </nav>
