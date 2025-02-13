@@ -148,7 +148,7 @@ export interface LoginResponse {
   user_data: {
     username: string;
     email: string;
-    role: number;
+    role: string;
     id: number;
     token: string;
   };

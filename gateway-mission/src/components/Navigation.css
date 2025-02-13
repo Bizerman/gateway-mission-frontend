@@ -25,7 +25,7 @@
 .usage-btns{
   display: flex;
   gap: 7%;
-  width: 400px;
+  width: 450px;
   justify-content: center;
   align-items: center;
 }
@@ -69,6 +69,7 @@
 .user-text{
   font-family: Play,sans-serif;
   font-weight: Bold;
+  text-align: center;
   width: max-content;
   font-size: 24px;
   color: rgba(255,255,255,1);

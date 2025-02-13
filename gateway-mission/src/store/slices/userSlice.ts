@@ -5,20 +5,19 @@ import {LoginResponse, UpdateResponse} from "../../api/Api.ts";
 interface UserState {
   username?: string | null;
   email?: string | null;
-  role: number;
+  role: string;
   error?: string | null;
   isAuthenticated: boolean;
 }
 
 const usernameFromStorage = localStorage.getItem('username');
 const emailFromStorage = localStorage.getItem('email');
-const roleFromStorage = localStorage.getItem('role');
 const tokenFromStorage = localStorage.getItem('token')
 
 const initialState: UserState = {
   username: usernameFromStorage || null,
   email: emailFromStorage || null,
-  role: roleFromStorage ? parseInt(roleFromStorage) : 0,
+  role: '',
   error: null,
   isAuthenticated: tokenFromStorage ? true : false,
 };
@@ -38,7 +37,7 @@ export const loginUserAsync = createAsyncThunk<LoginResponse, { email: string; p
       localStorage.setItem('email', email);
       localStorage.setItem('password', password); // Если необходимо сохранять пароль
       localStorage.setItem('username', response.data.user_data.username);
-      localStorage.setItem('role', String(response.data.user_data.role));
+      localStorage.setItem('role', response.data.user_data.role);
       localStorage.setItem('token', String(response.data.user_data.token));
       return response.data; // Возвращаем данные о пользователе
     } catch (error) {
@@ -127,13 +126,13 @@ export const userSlice = createSlice({
       .addCase(loginUserAsync.rejected, (state, action) => {
         console.error("Ошибка входа:", action.payload);
         state.error = action.payload as string;
-        state.role = 0;
+        state.role = ''
         state.isAuthenticated = false;
       })
       .addCase(logoutUserAsync.fulfilled, (state) => {
         state.username = null;
         state.email = null;
-        state.role = 0;
+        state.role = '';
         state.isAuthenticated = false;
         state.error = null; // Очистить ошибку при выходе
       })
