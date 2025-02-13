@@ -1,11 +1,12 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { Form, Button, Alert, Container } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
 import { loginUserAsync } from '../../store/slices/userSlice';
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from '../../../Routes';
 import Navigation from "../../components/Navigation.tsx";
+import './LoginPage.css'
 import {updateCsrfToken} from "../../api/Api.ts";
 
 const LoginPage: React.FC = () => {
@@ -39,23 +40,23 @@ const LoginPage: React.FC = () => {
     }
 };
     return (
-        <Container style={{ maxWidth: '100%', marginTop: '0' }}>
-            <Navigation />
-            <Container style={{ maxWidth: '400px', marginTop: '150px' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Рады снова Вас видеть!</h2>
+        <div className="login-page-content">
+            <Navigation/>
+            <div className="login-form-container">
+                <h2 className="login-title">Рады снова Вас видеть!</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="username" style={{ marginBottom: '15px' }}>
-                        <Form.Label>Логин пользователя</Form.Label>
+                    <div className="form-group">
+                        <Form.Label>Email</Form.Label>
                         <Form.Control
                             type="text"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            placeholder="Введите логин пользователя"
+                            placeholder="Введите свой email"
                         />
-                    </Form.Group>
-                    <Form.Group controlId="password" style={{ marginBottom: '20px' }}>
+                    </div>
+                    <div className="form-group">
                         <Form.Label>Пароль</Form.Label>
                         <Form.Control
                             type="password"
@@ -64,13 +65,14 @@ const LoginPage: React.FC = () => {
                             onChange={handleChange}
                             placeholder="Введите пароль"
                         />
-                    </Form.Group>
-                    <Button variant="primary" type="submit" style={{ width: '100%' }}>
+                    </div>
+                    <Button type="submit" className="submit-btn">
                         Войти
                     </Button>
                 </Form>
-            </Container>
-        </Container>
+            </div>
+        </div>
+
     );
 };
 
