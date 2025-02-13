@@ -34,7 +34,7 @@ const Navigation = () => {
                             <Link to={ROUTES.MISSIONS} className="user-text">Missions</Link>
                         </div>
                         <div className="users-btns">
-                            <Link to={ROUTES.PROFILE} className="user-text">{username}</Link>
+                            <Link to={ROUTES.PROFILE} className="user-text">{role} - {username}</Link>
                             <button className="user-text logout-btn" onClick={handleLogout}>Logout</button>
                         </div>
                     </>

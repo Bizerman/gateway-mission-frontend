@@ -13,11 +13,12 @@ interface UserState {
 const usernameFromStorage = localStorage.getItem('username');
 const emailFromStorage = localStorage.getItem('email');
 const tokenFromStorage = localStorage.getItem('token')
+const roleFronStorage = localStorage.getItem('role')
 
 const initialState: UserState = {
   username: usernameFromStorage || null,
   email: emailFromStorage || null,
-  role: '',
+  role: roleFronStorage || '',
   error: null,
   isAuthenticated: tokenFromStorage ? true : false,
 };
@@ -47,7 +48,6 @@ export const loginUserAsync = createAsyncThunk<LoginResponse, { email: string; p
 );
 
 
-// Асинхронный экшен для выхода
 // Асинхронный экшен для выхода
 export const logoutUserAsync = createAsyncThunk(
   'user/logoutUserAsync',
