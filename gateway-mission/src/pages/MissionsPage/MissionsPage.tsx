@@ -2,30 +2,32 @@ import { FC, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store"; // Путь может быть разным в зависимости от вашего проекта
 import { fetchMissions } from "../../store/slices/MissionDraftSlice"; // Импортируем экшен
+import { useNavigate } from "react-router-dom"; // Для навигации
 import './MissionsPage.css';
 
 const MissionsPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate(); // Используем для перехода на страницу миссии
   const { missions, loading, error } = useSelector((state: RootState) => state.missions);
-  const [statusFilter, setStatusFilter] = useState<string>(''); // Используем правильное имя переменной
+  const [statusFilter, setStatusFilter] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
+  const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null); // Для отслеживания выбранной миссии
 
   useEffect(() => {
-    // Загрузка миссий при монтировании компонента
     dispatch(fetchMissions());
   }, [dispatch]);
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatusFilter(event.target.value); // Устанавливаем значение фильтра
+    setStatusFilter(event.target.value);
   };
 
   const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStartDate(event.target.value); // Устанавливаем значение фильтра
+    setStartDate(event.target.value);
   };
 
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDate(event.target.value); // Устанавливаем значение фильтра
+    setEndDate(event.target.value);
   };
 
   // Фильтрация миссий
@@ -37,7 +39,17 @@ const MissionsPage: FC = () => {
   });
 
   const renderCell = (value: any) => {
-    return value || value === 0 ? value : '--'; // Если значения нет, возвращаем '--'
+    return value || value === 0 ? value : '--';
+  };
+
+  const handleRowClick = (missionId: string) => {
+    setSelectedMissionId(missionId); // Сохраняем выбранную миссию
+  };
+
+  const handleGoToMission = () => {
+    if (selectedMissionId) {
+      navigate(`/mission/${selectedMissionId}`); // Перенаправляем на страницу миссии
+    }
   };
 
   return (
@@ -47,7 +59,7 @@ const MissionsPage: FC = () => {
         <div className='missions-content-header'>
           <div className='missions-status-filter'>
             <label htmlFor="status-filter">Статус:</label>
-            <select id="status-filter" value={statusFilter} onChange={handleStatusChange}> {/* Используем statusFilter */}
+            <select id="status-filter" value={statusFilter} onChange={handleStatusChange}>
               <option value="">Все</option>
               <option value="Введена">Введена</option>
               <option value="В работе">В работе</option>
@@ -95,24 +107,29 @@ const MissionsPage: FC = () => {
               </tr>
             </thead>
             <tbody>
-              {missions.map((mission) => {
-                // Если миссия не прошла фильтрацию, отображаем пустые строки с -- в ячейках
-                const isFiltered = filteredMissions.includes(mission);
-                return (
-                  <tr key={mission.id}>
-                    <td>{renderCell(isFiltered ? mission.id : '--')}</td>
-                    <td>{renderCell(isFiltered ? mission.status : '--')}</td>
-                    <td>{renderCell(isFiltered ? mission.create_datetime : '--')}</td>
-                    <td>{renderCell(isFiltered ? mission.form_datetime : '--')}</td>
-                    <td>{renderCell(isFiltered ? mission.complete_datetime : '--')}</td>
-                    <td>{renderCell(isFiltered ? mission.plan_date : '--')}</td>
-                  </tr>
-                );
-              })}
+              {filteredMissions.map((mission) => (
+                <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
+                  <td>{renderCell(mission.id)}</td>
+                  <td>{renderCell(mission.status)}</td>
+                  <td>{renderCell(mission.create_datetime)}</td>
+                  <td>{renderCell(mission.form_datetime)}</td>
+                  <td>{renderCell(mission.complete_datetime)}</td>
+                  <td>{renderCell(mission.plan_date)}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}
       </div>
+
+      {/* Показываем кнопку, если строка выбрана */}
+      {selectedMissionId && (
+        <div className="mission-button-container">
+          <button onClick={handleGoToMission} className="go-to-mission-btn">
+            Перейти к миссии {selectedMissionId}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

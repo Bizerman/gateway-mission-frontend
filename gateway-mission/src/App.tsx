@@ -8,7 +8,7 @@ import ElementPage from "./pages/ElementPage/ElementPage.tsx";
 import {useEffect} from "react";
 import {invoke} from "@tauri-apps/api/core";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
-import DraftMissionPage from "./pages/DraftMissionPage/DraftMissionPage.tsx";
+import DraftMissionPage from "./pages/MissionPage/DraftMissionPage.tsx";
 import MissionsPage from "./pages/MissionsPage/MissionsPage.tsx";
 
 

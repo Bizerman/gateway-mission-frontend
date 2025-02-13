@@ -7,7 +7,8 @@ import {GatewayAddition, GatewayMission, MissionPayload} from "../../api/Api.ts"
 // Интерфейс состояния для миссий
 interface MissionState {
   missions: GatewayMission[];
-  currentMission: MissionPayload | null;
+  draftMission: MissionPayload | null;
+  currentMission:MissionPayload | null;
   loading: boolean;
   error: string | null;
 }
@@ -15,7 +16,8 @@ interface MissionState {
 // Начальное состояние
 const initialState: MissionState = {
   missions: [],
-  currentMission: null,
+  draftMission: null,
+  currentMission:null,
   loading: false,
   error: null,
 };
@@ -102,8 +104,8 @@ const draftMissionSlice = createSlice({
       state.error = action.payload.error;
     },
     setMissionDraftId: (state, action) => {
-      if (state.currentMission != null){
-        state.currentMission.mission = action.payload.mission.id;
+      if (state.draftMission != null){
+        state.draftMission.mission = action.payload.mission.id;
       }
     },
   },
@@ -126,6 +128,9 @@ const draftMissionSlice = createSlice({
       })
       .addCase(fetchMissionById.fulfilled, (state, action) => {
         state.loading = false;
+        if (action.payload.mission.status == 1){
+          state.draftMission = action.payload;
+        }
         state.currentMission = action.payload;
         state.error= null;
       })
@@ -135,7 +140,7 @@ const draftMissionSlice = createSlice({
         state.error = action.error.message || "Ошибка при загрузке миссии";
       })
       .addCase(addElementToMission.fulfilled, (state) => {
-        if (state.currentMission) {
+        if (state.draftMission) {
         }
         state.loading = false;
         state.error = null;

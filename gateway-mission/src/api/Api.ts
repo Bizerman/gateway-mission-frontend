@@ -111,12 +111,12 @@ export interface MissionPayload {
     id: number;
     mission_name: string | null;
     plan_date: string | null;
-    status: 'Введена' | 'В процессе' | 'Завершена'; // Статус можно уточнить, если есть больше значений
+    status: 1 | 2 | 3 | 4 | 5;
     create_datetime: string;
     form_datetime: string | null;
     complete_datetime: string | null;
-    moderator: string | null;
-    creator: string;
+    moderator: number | null;
+    creator: number;
     addition: string | null;
   };
   elements: {

@@ -18,7 +18,6 @@ const GatewayElementsPage: FC = () => {
   );
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
   const missionsImage = Rocket_img || "http://127.0.0.1:9000/img-for-rip/images/rocket.png";
-  console.log(elements)
   useEffect(() => {
     if (draft_mission_id) {
       dispatch(getGatewayElementsList());
