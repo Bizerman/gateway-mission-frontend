@@ -58,7 +58,7 @@ const MissionsPage: FC = () => {
       <div className='missions-content-box'>
         <div className='missions-content-header'>
           <div className='missions-status-filter'>
-            <label htmlFor="status-filter">Статус:</label>
+            <label className="filter-text-title" htmlFor="status-filter">Статус:</label>
             <select id="status-filter" value={statusFilter} onChange={handleStatusChange}>
               <option value="">Все</option>
               <option value="Введена">Введена</option>
@@ -69,7 +69,7 @@ const MissionsPage: FC = () => {
             </select>
           </div>
           <div className='missions-form-data-filter'>
-            <label htmlFor="start-date">Дата начала:</label>
+            <label className="filter-text-title" htmlFor="start-date">Дата начала:</label>
             <input
               type="date"
               id="start-date"
@@ -78,7 +78,7 @@ const MissionsPage: FC = () => {
             />
           </div>
           <div className='missions-complete-data-filter'>
-            <label htmlFor="end-date">Дата окончания:</label>
+            <label className="filter-text-title" htmlFor="end-date">Дата окончания:</label>
             <input
               type="date"
               id="end-date"
