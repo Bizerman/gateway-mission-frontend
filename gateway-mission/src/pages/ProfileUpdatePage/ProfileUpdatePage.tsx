@@ -3,14 +3,12 @@ import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
 import { updateUserAsync } from '../../store/slices/userSlice.ts';
-import { useNavigate, useParams } from "react-router-dom";
-import { ROUTES } from '../../../Routes';
+import { useParams } from "react-router-dom";
 import Navigation from "../../components/Navigation.tsx";
 import './ProfileUpdatePage.css';
 
 const EditProfilePage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const { id } = useParams(); // Получаем id пользователя из параметров URL
   const { isLoading, error, success } = useSelector(
     (state: RootState) => state.user
@@ -24,37 +22,44 @@ const EditProfilePage: React.FC = () => {
     password: '',
   });
 
-  // Загружаем данные пользователя в состояние (это можно сделать с помощью useEffect или использовать текущие данные из Redux)
   useEffect(() => {
     if (id) {
-      // Запрос для получения текущих данных пользователя
-      // Пример запроса, который должен возвращать данные пользователя
-      // Пример: dispatch(fetchUserData(id));
+      // Пример загрузки данных текущего пользователя
+      setFormData({
+        username: 'Current Username',
+        first_name: 'Current First Name',
+        last_name: 'Current Last Name',
+        email: 'user@example.com',
+        password: '', // Не показываем текущий пароль
+      });
     }
   }, [id]);
 
-  // Обработчик изменения данных
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Обработчик отправки данных
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (id) {
-      await dispatch(updateUserAsync({ id: +id, ...formData }));
-      if (success) {
-        navigate(`${ROUTES.PROFILE}`); // Переход на страницу профиля после успешного обновления
-      }
-    }
-  };
+  e.preventDefault();
+
+  // Логирование данных перед отправкой
+  console.log("Данные для отправки:", formData);
+
+  if (id) {
+    await dispatch(updateUserAsync({ id: +id, ...formData }));
+  }
+
+};
 
   return (
     <div className="edit-profile-page-content">
       <Navigation />
       <div className="edit-profile-form-container">
         <h2 className="edit-profile-title">Редактировать профиль</h2>
+
         {error && <Alert variant="danger">{error}</Alert>}
+        {success && <Alert variant="success">Профиль успешно обновлен!</Alert>}
+
         <Form onSubmit={handleSubmit}>
           <div className="form-group">
             <Form.Label>Имя пользователя</Form.Label>

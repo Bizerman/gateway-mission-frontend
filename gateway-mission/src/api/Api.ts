@@ -175,6 +175,7 @@ export interface UserLogin {
 }
 
 export interface UserRegistration {
+  id : number;
   /**
    * Username
    * @minLength 1

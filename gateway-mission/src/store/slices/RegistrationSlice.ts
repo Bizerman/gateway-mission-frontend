@@ -1,14 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {api} from "../../api";
+import {UserRegistration} from "../../api/Api.ts";
 
 
-export interface UserRegistration {
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-}
 
 interface UserRegistrationState {
   isLoading: boolean;
