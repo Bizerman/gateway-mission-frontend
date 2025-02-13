@@ -76,5 +76,23 @@ tr:nth-child(even) {
 
 tr:hover {
   background-color: #e0e0e0;
+}.missions-table-bordered {
+  width: 100%;
+  border-collapse: collapse;
 }
+
+.missions-table-bordered th,
+.missions-table-bordered td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.no-data-cell {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  padding: 20px;
+}
+
 

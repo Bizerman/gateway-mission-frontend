@@ -27,18 +27,21 @@
   align-content: center;
   gap: 16px;
 }
-.mission-btns{
+.mission-btns {
   display: flex;
-  height: auto;
   flex-direction: row;
-  padding-left: 1110px;
+  width: 1356px;
+  height: auto;
+  gap: 50px;
   margin-bottom: 50px;
+  justify-content: flex-end;
 }
 .mission-del-btn{
   all:unset;
-  width: 200px;
+  width: 265px;
   height: 56px;
-  border:1px solid rgb(61, 61, 61);
+  padding-inline: 15px;
+  border:2px solid rgb(61, 61, 61);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,11 +50,32 @@
 .mission-del-btn :hover{
   color: rgb(246, 65, 55);
 }
+.mission-form-btn{
+  all:unset;
+  width: 320px;
+  height: 56px;
+  padding-inline: 15px;
+  border:2px solid rgb(61, 61, 61);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mission-form-btn :hover{
+  color: rgb(246, 65, 55);
+}
+
 .mission-del-btn-text{
   color: rgba(0,0,0,1);
   font-family: Play,sans-serif;
   font-weight: normal;
-  font-size: 24px;
+  font-size: 20px;
+  text-align: center;
+}
+.mission-form-btn-text{
+  color: rgba(0,0,0,1);
+  font-family: Play,sans-serif;
+  font-weight: normal;
+  font-size: 20px;
   text-align: center;
 }
 .mission-frame-title {
@@ -61,7 +85,7 @@
 .draft-element-column-title {
   width: 176px;
   padding-left: 228px;
-  margin-right: 605px;
+  margin-right: 41%;
   color: rgba(0,0,0,1);
   font-family: Play,sans-serif;
   font-weight: normal;
@@ -150,18 +174,12 @@
   font-size: 24px;
   text-align: left;
 }
-.draft-element-price {
-  width: 60px;
-  color: rgba(0,0,0,1);
-  position: absolute;
-  margin-top: 69px;
-  left: 185px;
-  font-family: Play,sans-serif;
-  font-weight: normal;
-  font-size: 20px;
-  opacity: 1;
-  text-align: left;
+.second-element-box{
+  display: flex;
+  gap: 30px;
+  align-items: center;
 }
+
 .draft-element-description{
   width: 100%;
   height: 100%;
@@ -224,15 +242,14 @@
   text-align: center;
 }
 .delete-draft-element-btn {
-  width: 138px;
-  color: rgba(0,0,0,1);
-  position: absolute;
-  top: 65px;
-  left: 0px;
-  text-decoration: underline;
-  font-family: Play,sans-serif;
-  font-weight: normal;
-  font-size: 20px;
-  opacity: 1;
+  all:unset;
+  background-image: url("../../assets/delete-btn.png");
+  background-size: 47px 47px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 47px;
+  height: 47px;
+  border-radius: 12px;
   text-align: center;
+  display: inline-block; /* Добавлено для корректного отображения кнопки */
 }
