@@ -147,16 +147,24 @@ export interface LoginResponse {
   message: string;
   user_data: {
     username: string;
+    first_name: string;
+    last_name: string;
     email: string;
+    password: string;
     role: string;
-    id: number;
+    id: string;
     token: string;
   };
 }
 
 export interface UpdateResponse{
-    username:string;
-    email: string;
+  id:string;
+  username:string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+
 }
 export interface UserLogin {
   /**
@@ -216,17 +224,17 @@ import Cookies from 'js-cookie'; // Используем js-cookie для пол
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['X-CSRFToken'] = Cookies.get('csrftoken');
 axios.interceptors.request.use((config) => {
-  const csrfToken = Cookies.get('csrftoken'); // Получаем новый CSRF токен из cookies
+  const csrfToken = Cookies.get('csrftoken');
   console.log("Это токен из интерцептора", csrfToken);
   if (csrfToken) {
-    config.headers['X-CSRFToken'] = csrfToken; // Добавляем токен в заголовки каждого запроса
+    config.headers['X-CSRFToken'] = csrfToken;
   }
   return config;
 }, (error) => {
   return Promise.reject(error);
 });
 
-// Обновление CSRF токена
+
 export const updateCsrfToken = () => {
   const csrfToken = Cookies.get('csrftoken');
 
@@ -240,6 +248,11 @@ export const updateCsrfToken = () => {
   } else {
     console.error('CSRF токен отсутствует!');
   }
+}
+
+export function getCSRFToken() {
+  const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+  return csrfToken || '';
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -267,6 +280,7 @@ export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequest
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
   secure?: boolean;
   format?: ResponseType;
+  headers?: Record<string, string | undefined>;
 }
 
 export enum ContentType {
@@ -384,6 +398,7 @@ export class HttpClient<SecurityDataType = unknown> {
  * Test description
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+
   gatewayel = {
     /**
      * @description Возвращает элемент шлюза по ID.
@@ -692,7 +707,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/user/logout/
      * @secure
      */
-    userLogoutCreate: (params: RequestParams = {}) =>
+    userLogoutCreate: (params?: { headers: { "X-CSRFToken": any }; withCredentials: boolean }) =>
       this.request<void, any>({
         path: `/user/logout/`,
         method: "POST",
@@ -734,4 +749,27 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
+  private headers: Record<string, string | undefined>;
+
+  constructor(config: ApiConfig) {
+    super(config);
+    this.headers = config.headers || {};
+  }
+
+  // Метод для обновления заголовков
+  setHeaders(headers: Record<string, string | undefined>) {
+    this.headers = { ...this.headers, ...headers };
+  }
+
+  // Метод для обновления CSRF токена в заголовках
+  updateDefaultsCsrfToken() {
+    const csrfToken = getCSRFToken(); // Получаем актуальный токен
+    if (csrfToken) {
+      // Обновляем глобальные заголовки
+      this.instance.defaults.headers['X-CSRFToken'] = csrfToken;
+      console.log('CSRF токен обновлен:', csrfToken);
+    } else {
+      console.error('CSRF токен не найден!');
+    }
+  }
 }
