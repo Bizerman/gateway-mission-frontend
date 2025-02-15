@@ -23,7 +23,7 @@ const ElementPage: FC = () => {
   if (!element) return <h2 className="d-flex justify-content-center align-items-center vw-100">Данные отсутствуют</h2>;
 
   return (
-    <>
+    <div className="element-page">
       <BreadCrumbs crumbs={[{ label: element.title || ROUTE_LABELS.GATEWAY_ELEMENT_DETAIL, path: `/element/${element_id}` }]} />
       <div className="product-page-content">
         <img src={element.img_url || "default_image_url.jpg"} className="product-image" alt={element.title} />
@@ -33,7 +33,7 @@ const ElementPage: FC = () => {
           <span className="product-info">{element.full_description || "Описание отсутствует"}</span>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -6,6 +6,7 @@ import './RegisterPage.css';
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "../../store/store.ts";
 import {registerUserAsync} from "../../store/slices/RegistrationSlice.ts";
+import {UserRegistration} from "../../api/Api.ts";
 
 const RegistrationPage: React.FC = () => {
     const navigate = useNavigate();
@@ -29,8 +30,8 @@ const RegistrationPage: React.FC = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            await dispatch(registerUserAsync(formData)); // Отправка данных на сервер
-            navigate('/login'); // Переход на страницу входа после успешной регистрации
+            await dispatch(registerUserAsync(formData as UserRegistration));
+            navigate('/login');
         } catch (err) {
             setError('Ошибка при регистрации. Попробуйте снова.');
         }
