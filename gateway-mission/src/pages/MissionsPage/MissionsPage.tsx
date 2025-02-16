@@ -12,7 +12,7 @@ const MissionsPage: FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
-  const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null); // Для отслеживания выбранной миссии
+  const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchMissions());

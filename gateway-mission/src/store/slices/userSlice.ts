@@ -133,8 +133,8 @@ export const updateUserAsync = createAsyncThunk(
           sessionStorage.setItem(key, value);
         }
       });
-
-      return updatedUser; // Возвращаем обновленные данные пользователя
+      console.log(updatedUser)
+      return updatedUser;
     } catch (error) {
       console.error('Ошибка при обновлении профиля:', error);
       return rejectWithValue('Ошибка при обновлении профиля');
@@ -186,40 +186,32 @@ export const userSlice = createSlice({
       .addCase(logoutUserAsync.rejected, (state, action) => {
         state.error = action.payload as string;
       })
-      .addCase(updateUserAsync.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-        state.success = false;
-      })
       .addCase(updateUserAsync.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.success = true;
+            state.isLoading = false;
+            state.success = true;
 
-        if (!action.payload.id) {
-          return;
-        }
-        if (action.payload.password) {
-          state.id = 0;
-          state.username = null;
-          state.email = '';
-          state.first_name = '';
-          state.last_name = '';
-          state.password = '';
-          state.role = '';
-          state.isAuthenticated = false;
-        }
-        state.id = Number(action.payload.id) || state.id;
-        state.username = action.payload.username || state.username;
-        state.email = action.payload.email || state.email;
-        state.first_name = action.payload.first_name || state.first_name;
-        state.last_name = action.payload.last_name || state.last_name;
-        state.password = action.payload.password || state.password;
-      })
-      .addCase(updateUserAsync.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
-        state.success = false;
-      });
+            if (!action.payload.id) {
+                return;
+            }
+
+            Object.entries(action.payload).forEach(([key, value]) => {
+                if (value !== undefined && key in state) {
+                    (state as any)[key] = value;
+                }
+            });
+
+            // Проверяем, действительно ли пользователь отправлял новый пароль
+            if (action.meta.arg.password) {
+                state.id = 0;
+                state.username = null;
+                state.email = '';
+                state.first_name = '';
+                state.last_name = '';
+                state.password = '';
+                state.role = '';
+                state.isAuthenticated = false;
+            }
+        })
   },
 });
 

@@ -5,19 +5,48 @@ import { ROUTES } from "../../Routes.tsx";
 import "./Navigation.css";
 import {logoutUserAsync} from "../store/slices/userSlice.ts";
 import {getGatewayElementsList, setSearchValue} from "../store/slices/GatewayElementsSlice.ts";
+import {fetchMissionById, missionElementDelete} from "../store/slices/MissionDraftSlice.ts";
 
 const Navigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { draft_mission_id } = useSelector(
+    (state: RootState) => state.gateway
+  );
+
   const { isAuthenticated,  username,role } = useSelector((state: RootState) => state.user);
   const isHomePage = location.pathname === '/';
   const handleLogout = async () => {
-    await dispatch(logoutUserAsync());
-    dispatch(setSearchValue(''));
-    navigate('/elements'); // Переход на страницу списка услуг
-    await dispatch(getGatewayElementsList()); // Очищаем поле поиска
-  };
+        try {
+            // Получаем текущую миссию
+            const missionResponse = await dispatch(fetchMissionById(String(draft_mission_id))).unwrap();
+
+            if (missionResponse?.elements) {
+                // Удаляем все элементы черновика
+                await Promise.all(
+                    missionResponse.elements.map(element =>
+                        dispatch(missionElementDelete({
+                            missionId: String(missionResponse.mission.id),
+                            elementId: String(element.id),
+                        })).unwrap()
+                    )
+                );
+            }
+        } catch (error) {
+            console.error("Ошибка при удалении элементов или миссии:", error);
+        }
+        // Выход пользователя
+        await dispatch(logoutUserAsync());
+
+        // Очистка состояния
+        dispatch(setSearchValue(''));
+        await dispatch(getGatewayElementsList());
+
+        // Переход на главную страницу
+        navigate('/');
+    };
+
 
     return (
         <nav className={`head ${isHomePage ? 'without-bg' : 'with-bg'}`}>

@@ -7,7 +7,6 @@ import {GatewayAddition, GatewayMission, MissionPayload} from "../../api/Api.ts"
 // Интерфейс состояния для миссий
 interface MissionState {
   missions: GatewayMission[];
-  draftMission: MissionPayload | null;
   currentMission:MissionPayload | null;
   loading: boolean;
   error: string | null;
@@ -16,7 +15,6 @@ interface MissionState {
 // Начальное состояние
 const initialState: MissionState = {
   missions: [],
-  draftMission: null,
   currentMission:null,
   loading: false,
   error: null,
@@ -39,7 +37,6 @@ export const fetchMissionById = createAsyncThunk(
   'missions/fetchMissionById',
   async (id: string, { rejectWithValue }) => {
     try {
-      setMissionDraftId(id)
       const response = await api.mission.missionRead(id);
       return response.data;
     } catch (error) {
@@ -103,11 +100,6 @@ const draftMissionSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload.error;
     },
-    setMissionDraftId: (state, action) => {
-      if (state.draftMission != null){
-        state.draftMission.mission = action.payload.mission.id;
-      }
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -128,9 +120,6 @@ const draftMissionSlice = createSlice({
       })
       .addCase(fetchMissionById.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload.mission.status == 1){
-          state.draftMission = action.payload;
-        }
         state.currentMission = action.payload;
         state.error= null;
       })
@@ -140,8 +129,6 @@ const draftMissionSlice = createSlice({
         state.error = action.error.message || "Ошибка при загрузке миссии";
       })
       .addCase(addElementToMission.fulfilled, (state) => {
-        if (state.draftMission) {
-        }
         state.loading = false;
         state.error = null;
       })
@@ -192,6 +179,6 @@ const draftMissionSlice = createSlice({
 });
 
 // Экшены для слайса
-export const {setError, setMissionDraftId } = draftMissionSlice.actions;
+export const {setError } = draftMissionSlice.actions;
 
 export default draftMissionSlice.reducer;

@@ -7,10 +7,14 @@ import Navigation from "../../components/Navigation.tsx";
 import './ProfileUpdatePage.css';
 import { UserRegistration } from "../../api/Api.ts";
 import {useNavigate} from "react-router-dom";
+import {fetchMissionById, missionElementDelete} from "../../store/slices/MissionDraftSlice.ts";
 
 const EditProfilePage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { draft_mission_id } = useSelector(
+    (state: RootState) => state.gateway
+  );
   const { id, username, email, first_name, last_name, isLoading, error, success } = useSelector(
     (state: RootState) => state.user
   );
@@ -74,10 +78,9 @@ const EditProfilePage: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Валидируем форму
     if (!validateForm()) {
-      console.log("Ошибка валидации. Проверьте данные.");
-      return;
+        console.log("Ошибка валидации. Проверьте данные.");
+        return;
     }
 
     const updatedData: Partial<UserRegistration> = {};
@@ -86,33 +89,55 @@ const EditProfilePage: React.FC = () => {
     if (formData.first_name && formData.first_name !== first_name) updatedData.first_name = formData.first_name;
     if (formData.last_name && formData.last_name !== last_name) updatedData.last_name = formData.last_name;
     if (formData.email && formData.email !== email) updatedData.email = formData.email;
-    if (formData.password) updatedData.password = formData.password;
+
+
+    if (formData.password?.trim()) {
+        updatedData.password = formData.password;
+    }
 
     if (Object.keys(updatedData).length === 0) {
-      console.log("Данные не изменились. Обновление не требуется.");
-      return;
+        console.log("Данные не изменились. Обновление не требуется.");
+        return;
     }
 
     try {
-      await dispatch(updateUserAsync({ id, ...updatedData } as UserRegistration));
-      console.log("Данные отправлены:", { id, ...updatedData });
+        if (updatedData.password) {
+            try {
+                console.log(draft_mission_id);
+                const missionResponse = await dispatch(fetchMissionById(String(draft_mission_id))).unwrap();
+                console.log(missionResponse);
+                if (missionResponse?.elements) {
+                    await Promise.all(
+                        missionResponse.elements.map(element =>
+                            dispatch(missionElementDelete({
+                                missionId: String(missionResponse.mission.id),
+                                elementId: String(element.id),
+                            })).unwrap()
+                        )
+                    );
+                }
+            } catch (error) {
+                console.error("Ошибка при удалении элементов или миссии:", error);
+            }
 
-      if (formData.password) {
-        await dispatch(logoutUserAsync());
-        console.log("Пароль изменен, пользователь вышел из системы.");
-        navigate('/');
-      }
-
+            await dispatch(updateUserAsync({ id, ...updatedData } as UserRegistration));
+            await dispatch(logoutUserAsync());
+            console.log("Пароль изменен, пользователь вышел из системы.");
+            navigate('/');
+        } else {
+            console.log(updatedData)
+            await dispatch(updateUserAsync({ id, ...updatedData } as UserRegistration));
+        }
     } catch (error) {
-      console.error("Ошибка при обновлении профиля:", error);
+        console.error("Ошибка при обновлении профиля:", error);
 
-      const typedError = error as Error;
-
-      if (typedError.message === 'Email already exists') {
-        setFormErrors((prev) => ({ ...prev, emailExists: true }));
-      }
+        const typedError = error as Error;
+        if (typedError.message === 'Email already exists') {
+            setFormErrors((prev) => ({ ...prev, emailExists: true }));
+        }
     }
-  };
+};
+
 
   return (
     <div className="edit-profile-page-content">

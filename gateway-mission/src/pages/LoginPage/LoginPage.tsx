@@ -34,8 +34,7 @@ const LoginPage: React.FC = () => {
             // Можно тут вывести ошибку на экран или выполнить другие действия
         } else {
             await updateCsrfToken();
-            // Авторизация успешна, выполняем переход
-            navigate(`${ROUTES.GATEWAY_ELEMENTS}`); // Переход на страницу услуг
+            navigate(`${ROUTES.HOME}`);
         }
     }
 };

@@ -15,28 +15,23 @@ const MissionPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  // Получаем миссию из Redux состояния
   const { currentMission, loading, error } = useSelector(
     (state: RootState) => state.missions
   );
 
-  // Состояние для элементов миссии
   const [elements, setElements] = useState(currentMission?.elements || []);
 
-  // Загружаем миссию по mission_id из URL
   useEffect(() => {
     if (mission_id) {
-      dispatch(fetchMissionById(mission_id)); // Загружаем миссию
+      dispatch(fetchMissionById(mission_id));
     }
   }, [dispatch, mission_id]);
 
   useEffect(() => {
-    if (currentMission) {
-      // Обновляем элементы, если они появились в текущей миссии
-      setElements(currentMission.elements || []);
+    if (currentMission && currentMission.elements) {
+      setElements(currentMission.elements);
 
-      // Загружаем элементы, если их нет в сторе
-      currentMission.elements?.forEach((elementMission) => {
+      currentMission.elements.forEach((elementMission) => {
         if (elementMission.id) {
           dispatch(getGatewayElement(Number(elementMission.id)));
         }
@@ -44,7 +39,7 @@ const MissionPage: FC = () => {
     }
   }, [dispatch, currentMission]);
 
-  // Обработчик для удаления миссии
+
   const handleDeleteMission = async () => {
     if (!currentMission?.mission.id) return;
 
@@ -55,7 +50,6 @@ const MissionPage: FC = () => {
           await dispatch(missionElementDelete({ missionId: String(currentMission.mission.id), elementId: String(element.id) }));
         }
       }
-      // Перенаправляем на главную страницу
       navigate("/");
     } catch (error) {
       console.error("Ошибка при удалении элементов или миссии:", error);
