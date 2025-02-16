@@ -1,14 +1,14 @@
 import { FC, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../../store/store"; // Путь может быть разным в зависимости от вашего проекта
-import { fetchMissions } from "../../store/slices/MissionDraftSlice"; // Импортируем экшен
-import { useNavigate } from "react-router-dom"; // Для навигации
+import { RootState, AppDispatch } from "../../store/store";
+import { fetchMissions } from "../../store/slices/MissionDraftSlice";
+import { useNavigate } from "react-router-dom";
 import './MissionsPage.css';
 
 const MissionsPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate(); // Используем для перехода на страницу миссии
-  const { missions, loading, error } = useSelector((state: RootState) => state.missions);
+  const navigate = useNavigate();
+  const { missions, error } = useSelector((state: RootState) => state.missions);
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
@@ -42,13 +42,24 @@ const MissionsPage: FC = () => {
     return value || value === 0 ? value : '--';
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ru-RU');
+  };
+
+  const renderDateCell = (date: string | null | undefined) => {
+    if (!date) return '--'; // Возвращаем 'нет данных', если дата null или undefined
+    return formatDate(date); // Форматируем дату, если она валидна
+  };
+
+
   const handleRowClick = (missionId: string) => {
-    setSelectedMissionId(missionId); // Сохраняем выбранную миссию
+    setSelectedMissionId(missionId);
   };
 
   const handleGoToMission = () => {
     if (selectedMissionId) {
-      navigate(`/mission/${selectedMissionId}`); // Перенаправляем на страницу миссии
+      navigate(`/mission/${selectedMissionId}`);
     }
   };
 
@@ -90,13 +101,11 @@ const MissionsPage: FC = () => {
       </div>
 
       <div className="missions-table">
-        {loading ? (
-          <p>Загрузка миссий...</p>
-        ) : error ? (
+        { error ? (
           <p>{error}</p>
         ) : (
-          <table className="missions-table-bordered">
-            <thead>
+            <table className="missions-table-bordered">
+              <thead>
               <tr>
                 <th>№</th>
                 <th>Статус</th>
@@ -105,30 +114,35 @@ const MissionsPage: FC = () => {
                 <th>Дата завершения</th>
                 <th>Дата планирования</th>
               </tr>
-            </thead>
-            <tbody>
-              {filteredMissions.map((mission) => (
-                <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
-                  <td>{renderCell(mission.id)}</td>
-                  <td>{renderCell(mission.status)}</td>
-                  <td>{renderCell(mission.create_datetime)}</td>
-                  <td>{renderCell(mission.form_datetime)}</td>
-                  <td>{renderCell(mission.complete_datetime)}</td>
-                  <td>{renderCell(mission.plan_date)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+              {filteredMissions.length > 0 ? (
+                  filteredMissions.map((mission) => (
+                      <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
+                        <td>{renderCell(mission.id)}</td>
+                        <td>{renderCell(mission.status)}</td>
+                        <td>{renderDateCell(mission.create_datetime)}</td>
+                        <td>{renderDateCell(mission.form_datetime)}</td>
+                        <td>{renderDateCell(mission.complete_datetime)}</td>
+                        <td>{renderDateCell(mission.plan_date)}</td>
+                      </tr>
+                  ))
+              ) : (
+                  <tr>
+                    <td colSpan={6} className="no-missions-message">Нет доступных миссий</td>
+                  </tr>
+              )}
+              </tbody>
+            </table>
         )}
       </div>
 
-      {/* Показываем кнопку, если строка выбрана */}
       {selectedMissionId && (
-        <div className="mission-button-container">
-          <button onClick={handleGoToMission} className="go-to-mission-btn">
-            Перейти к миссии {selectedMissionId}
-          </button>
-        </div>
+          <div className="mission-button-container">
+            <button onClick={handleGoToMission} className="go-to-mission-btn">
+              Перейти к миссии {selectedMissionId}
+            </button>
+          </div>
       )}
     </div>
   );

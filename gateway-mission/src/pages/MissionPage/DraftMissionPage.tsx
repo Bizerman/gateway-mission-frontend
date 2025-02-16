@@ -15,7 +15,7 @@ const MissionPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { currentMission, loading, error } = useSelector(
+  const { currentMission, error } = useSelector(
     (state: RootState) => state.missions
   );
 
@@ -99,14 +99,6 @@ const MissionPage: FC = () => {
     ));
   };
 
-  // Если элементы пустые и миссия загружена, перенаправляем
-  useEffect(() => {
-    if (!loading && currentMission && currentMission?.elements?.length === 0) {
-      navigate("/"); // Перенаправление на главную страницу, если элементов нет
-    }
-  }, [loading, currentMission, navigate]);
-
-  if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {error}</p>;
   if (!currentMission) return <p>Миссия не найдена</p>;
 

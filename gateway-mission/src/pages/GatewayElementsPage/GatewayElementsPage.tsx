@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import {FC, useEffect, useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store.ts";
 import { getGatewayElementsList, setSearchValue } from "../../store/slices/GatewayElementsSlice.ts";
@@ -13,11 +13,15 @@ import {Link} from "react-router-dom";
 const GatewayElementsPage: FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
-  const { elements = [], draft_element_count, draft_mission_id, searchValue = '', loading, error } = useSelector(
+  const { elements = [], draft_element_count, draft_mission_id, searchValue = '', error } = useSelector(
     (state: RootState) => state.gateway || {}
   );
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
   const missionsImage = Rocket_img || "http://127.0.0.1:9000/img-for-rip/images/rocket.png";
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
   useEffect(() => {
     if (draft_mission_id) {
       dispatch(getGatewayElementsList());
@@ -32,15 +36,22 @@ const GatewayElementsPage: FC = () => {
   const handleAddToMission = async (elementId: string) => {
     if (draft_mission_id) {
       try {
-        await dispatch(addElementToMission(elementId));  // Добавляем элемент в миссию
-        dispatch(getGatewayElementsList());  // Перезапрашиваем элементы
+        await dispatch(addElementToMission(elementId));
+        dispatch(getGatewayElementsList());
+
+        setToastMessage("Элемент успешно добавлен в миссию!");
+        setShowToast(true);
       } catch (error) {
         console.error("Ошибка при добавлении элемента в миссию:", error);
+
+        // Показываем ошибку
+        setToastMessage("Ошибка при добавлении элемента!");
+        setShowToast(true);
       }
     }
   };
   return (
-    <div className="gateway-products-page-content">
+        <div className="gateway-products-page-content">
       <div className="content-head">
         <span className="gateway-products-title">Космические корабли и модули</span>
         <div className="orders-search">
@@ -54,11 +65,7 @@ const GatewayElementsPage: FC = () => {
             <Link to={`/mission/${draft_mission_id}`}>
               <div className="missions-active">
                 <div className="missions-inside">
-                  <img
-                    src={missionsImage}
-                    alt="Missions"
-                    className="missions-image"
-                  />
+                  <img src={missionsImage} alt="Missions" className="missions-image" />
                   <span className="missions-quantity">({draft_element_count})</span>
                 </div>
               </div>
@@ -66,11 +73,7 @@ const GatewayElementsPage: FC = () => {
           ) : (
             <div className="missions-passive">
               <div className="missions-inside">
-                <img
-                  src={missionsImage}
-                  alt="Missions"
-                  className="missions-image"
-                />
+                <img src={missionsImage} alt="Missions" className="missions-image" />
                 <span className="missions-quantity">(0)</span>
               </div>
             </div>
@@ -79,21 +82,25 @@ const GatewayElementsPage: FC = () => {
       </div>
 
       <div className="products">
-        {loading ? (
-          <p className="txt">Загрузка...</p>
-        ) : error ? (
+        {error ? (
           <p className="txt">{error}</p>
         ) : elements.length > 0 ? (
           elements.map((element) => (
-            <GatewayCard
-              key={element.id}
-              element={element}
-              onAddToMission={handleAddToMission}
-            />
+            <GatewayCard key={element.id} element={element} onAddToMission={handleAddToMission} />
           ))
         ) : (
           <p className="txt">Нет доступных продуктов</p>
         )}
+      </div>
+
+      <div className="toast-container-custom">
+        <div className={`toast align-items-center bg-success text-white ${showToast ? "show" : ""}`} role="alert">
+          <div className="d-flex">
+            <div className="toast-body">{toastMessage}</div>
+            <button type="button" className="btn-close btn-close-white me-2 m-auto"
+                    onClick={() => setShowToast(false)}></button>
+          </div>
+        </div>
       </div>
     </div>
   );

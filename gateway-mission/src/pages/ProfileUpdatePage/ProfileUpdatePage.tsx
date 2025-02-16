@@ -25,7 +25,7 @@ const EditProfilePage: React.FC = () => {
     last_name: last_name || '',
     email: email || '',
     password: '',
-    confirmPassword: '', // Новое поле для подтверждения пароля
+    confirmPassword: '',
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -45,12 +45,10 @@ const EditProfilePage: React.FC = () => {
     });
   }, [username, first_name, last_name, email]);
 
-  // Функция обновления данных формы
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Функция для валидации паролей и email
   const validateForm = () => {
     let valid = true;
 
