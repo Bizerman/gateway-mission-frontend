@@ -1,17 +1,15 @@
-import {FC, useEffect, useState} from "react";
+import { FC, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store.ts";
 import { getGatewayElementsList, setSearchValue } from "../../store/slices/GatewayElementsSlice.ts";
-import {addElementToMission, fetchMissionById} from "../../store/slices/MissionDraftSlice.ts";
+import { addElementToMission, fetchMissionById } from "../../store/slices/MissionDraftSlice.ts";
 import GatewayCard from "../../components/GatewayElement.tsx";
 import "./GatewayElementsPage.css";
 import ElementSearchBar from "../../components/ElementSearchBar.tsx";
 import Rocket_img from "../../assets/rocket.png";
-import {Link} from "react-router-dom";
-
+import { Link } from "react-router-dom";
 
 const GatewayElementsPage: FC = () => {
-
   const dispatch = useDispatch<AppDispatch>();
   const { elements = [], draft_element_count, draft_mission_id, searchValue = '', error } = useSelector(
     (state: RootState) => state.gateway || {}
@@ -21,13 +19,14 @@ const GatewayElementsPage: FC = () => {
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"success" | "warning">("success");
 
   useEffect(() => {
     if (draft_mission_id) {
       dispatch(getGatewayElementsList());
       dispatch(fetchMissionById(String(draft_mission_id)));
     }
-  }, [dispatch, draft_mission_id,draft_element_count]);
+  }, [dispatch, draft_mission_id, draft_element_count]);
 
   const handleSearch = () => {
     dispatch(getGatewayElementsList());
@@ -36,22 +35,26 @@ const GatewayElementsPage: FC = () => {
   const handleAddToMission = async (elementId: string) => {
     if (draft_mission_id) {
       try {
-        await dispatch(addElementToMission(elementId));
+        await dispatch(addElementToMission(elementId)).unwrap();
         dispatch(getGatewayElementsList());
-
         setToastMessage("Элемент успешно добавлен в миссию!");
+        setToastType("success");
+
         setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
       } catch (error) {
         console.error("Ошибка при добавлении элемента в миссию:", error);
 
-        // Показываем ошибку
-        setToastMessage("Ошибка при добавлении элемента!");
+        setToastMessage("Элемент уже добавлен в черновик");
+        setToastType("warning");
         setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
       }
     }
   };
+
   return (
-        <div className="gateway-products-page-content">
+    <div className="gateway-products-page-content">
       <div className="content-head">
         <span className="gateway-products-title">Космические корабли и модули</span>
         <div className="orders-search">
@@ -93,15 +96,20 @@ const GatewayElementsPage: FC = () => {
         )}
       </div>
 
-      <div className="toast-container-custom">
-        <div className={`toast align-items-center bg-success text-white ${showToast ? "show" : ""}`} role="alert">
+      {/* Всплывающее уведомление */}
+      {showToast && (
+        <div className={`toast-container-custom ${toastType === "success" ? "bg-success" : "bg-warning"}`}>
           <div className="d-flex">
             <div className="toast-body">{toastMessage}</div>
-            <button type="button" className="btn-close btn-close-white me-2 m-auto"
-                    onClick={() => setShowToast(false)}></button>
+            <button
+              type="button"
+              className="btn-close ms-2 me-2 m-auto"
+              onClick={() => setShowToast(false)}
+            >
+            </button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -85,7 +85,7 @@
 .draft-element-column-title {
   width: 176px;
   padding-left: 228px;
-  margin-right: 41%;
+  margin-right: 28%;
   color: rgba(0,0,0,1);
   font-family: Play,sans-serif;
   font-weight: normal;
@@ -93,6 +93,16 @@
   text-align: center;
 }
 .draft-element-column-description {
+  width: 222px;
+  color: rgba(0,0,0,1);
+  font-family: Play,sans-serif;
+  font-weight: normal;
+  font-size: 32px;
+  margin-right: 13%;
+  opacity: 1;
+  text-align: center;
+}
+.draft-element-column-addition {
   width: 222px;
   color: rgba(0,0,0,1);
   font-family: Play,sans-serif;
@@ -120,13 +130,14 @@
   grid-row-gap: 17px;
 }
 .draft-element{
-  width: 1259px;
+  width: 100vw;
   height: auto;
   display: flex;
   flex-direction: row;
   margin-top: 1%;
-  gap: 200px;
+  gap: 5%;
   padding-left: 53px;
+
 }
 .card-frame-line-1{
   width:100%;
@@ -181,7 +192,7 @@
 }
 
 .draft-element-description{
-  width: 100%;
+  width: 25%;
   height: 100%;
   color: rgba(0,0,0,1);
   font-family: Play,sans-serif;

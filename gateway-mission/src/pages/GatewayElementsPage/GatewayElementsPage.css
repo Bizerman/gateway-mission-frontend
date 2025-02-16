@@ -104,29 +104,46 @@ a {
   margin-top: 40px;
 }
 
-/* Центрирование уведомления */
 .toast-container-custom {
   position: fixed;
-  top: 90%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1050;
-  min-width: 300px;
-}
-
-/* Красивый зелёный тост */
-.toast.bg-success {
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  bottom: 20px;
+  right: 40%;
+  min-width: 250px;
+  padding: 15px;
   border-radius: 8px;
-  padding: 10px 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   font-size: 16px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
 }
 
-/* Анимация появления */
-.toast.show {
-  animation: fadeIn 0.3s ease-in-out;
+.bg-success {
+  background-color: #28a745; /* Зеленый для успеха */
+  color: white;
 }
+
+.bg-warning {
+  background-color: #ffc107; /* Желтый для предупреждения */
+  color: black;
+}
+
+.toast-body {
+  flex-grow: 1;
+  padding-right: 10px;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: inherit;
+}
+
 
 @keyframes fadeIn {
   from {

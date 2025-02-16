@@ -87,12 +87,13 @@ const MissionPage: FC = () => {
         </div>
         <div className="second-element-box">
           <span className="draft-element-description">{element.short_description || '--'}</span>
+          <span className="draft-element-description">{element.short_description || '--'}</span>
           {String(currentMission?.mission.status) === 'Введена' && (
-            <button
-              className="delete-draft-element-btn"
-              onClick={() => handleRemoveClick(String(currentMission?.mission.id), String(element.id))}
-            >
-            </button>
+              <button
+                  className="delete-draft-element-btn"
+                  onClick={() => handleRemoveClick(String(currentMission?.mission.id), String(element.id))}
+              >
+              </button>
           )}
         </div>
       </div>
@@ -109,6 +110,7 @@ const MissionPage: FC = () => {
         <div className="mission-frame-title">
           <span className="draft-element-column-title">Объект</span>
           <span className="draft-element-column-description">Описание</span>
+          <span className="draft-element-column-description">Комментарий</span>
           <div className="card-frame-line-1"></div>
         </div>
         <div className="mission-frame-info">{renderElements()}</div>
