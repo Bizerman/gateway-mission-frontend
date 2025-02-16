@@ -111,17 +111,38 @@
   opacity: 1;
   text-align: center;
 }
-.price-title {
-  width: 77px;
-  color: rgba(0,0,0,1);
-  position: absolute;
-  left: 1214px;
-  font-family: Play,sans-serif;
+
+.draft-element-input[type="text"] {
+  all: unset; /* Сбросить все стили */
+  width: 100%; /* Ширина 100% */
+  padding: 8px; /* Отступы */
+  font-size: 16px; /* Размер шрифта */
+  border: 1px solid #ccc; /* Граница */
+  border-radius: 4px; /* Скругление углов */
+  background-color: #fff; /* Белый фон */
+  transition: border-color 0.3s ease; /* Плавное изменение цвета границы */
+}
+
+/* Стиль при фокусе */
+.draft-element-input[type="text"]:focus {
+  border-color: rgb(246, 65, 55);
+  outline: none;
+  box-shadow: 0 0 5px rgb(180, 47, 39);
+}
+.edit-addition-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.draft-element-addition{
+  width: 25%;
+  font-family: Play, sans-serif;
   font-weight: normal;
-  font-size: 32px;
-  opacity: 1;
+  font-size: 20px;
   text-align: center;
 }
+
+
 .mission-frame-info {
   width: 1366px;
   display: grid;
@@ -187,7 +208,7 @@
 }
 .second-element-box{
   display: flex;
-  gap: 30px;
+  gap: 5%;
   align-items: center;
 }
 

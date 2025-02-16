@@ -34,6 +34,7 @@ export interface GatewayElement {
   img_url?: string;
   /** Полное описание элемента */
   full_description?: string | null;
+  addition?:  string | null;
 }
 export interface GatewayElementsResp {
     element?: GatewayElement | null;
@@ -126,6 +127,7 @@ export interface MissionPayload {
     status: boolean;
     img_url: string;
     full_description: string;
+    addition: string | null;
   }[];
 }
 

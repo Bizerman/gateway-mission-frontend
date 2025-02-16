@@ -4,12 +4,12 @@ import {GatewayElement, GatewayElementsResp} from "../../api/Api.ts";
 
 
 export const empty_element: GatewayElement = {
-  id: 0,
-  title: '',
-  short_description: '',
-  status: false,
-  img_url: '',
-  full_description: '',
+    id: 0,
+    title: '',
+    short_description: '',
+    status: false,
+    img_url: '',
+    full_description: '',
 };
 
 const initialState: GatewayElementsResp = {

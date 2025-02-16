@@ -5,6 +5,7 @@ import { RootState, AppDispatch } from "../../store/store";
 import {
   fetchMissionById,
   missionElementDelete,
+  updateMissionElement,
   updateMissionForm
 } from "../../store/slices/MissionDraftSlice";
 import { getGatewayElement } from "../../store/slices/GatewayElementsSlice";
@@ -20,6 +21,13 @@ const MissionPage: FC = () => {
   );
 
   const [elements, setElements] = useState(currentMission?.elements || []);
+  const [editedElements, setEditedElements] = useState(
+    elements?.map((element) => ({
+      ...element,
+      addition: element.addition || "", // Обеспечиваем, что поле всегда строка
+      isEditing: false // Добавляем флаг редактирования
+    }))
+  );
 
   useEffect(() => {
     if (mission_id) {
@@ -31,6 +39,16 @@ const MissionPage: FC = () => {
     if (currentMission && currentMission.elements) {
       setElements(currentMission.elements);
 
+      // Добавляем addition для каждого элемента
+      setEditedElements(
+        currentMission.elements.map((element) => ({
+          ...element,
+          addition: element.addition || "", // Обеспечиваем, что поле всегда строка
+          isEditing: false
+        }))
+      );
+
+      // Получаем дополнение (addition) для каждого элемента через м-м
       currentMission.elements.forEach((elementMission) => {
         if (elementMission.id) {
           dispatch(getGatewayElement(Number(elementMission.id)));
@@ -40,14 +58,55 @@ const MissionPage: FC = () => {
   }, [dispatch, currentMission]);
 
 
+
+
+  const handleAdditionChange = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    setEditedElements((prevElements) =>
+      prevElements.map((element) =>
+        element.id === id ? { ...element, addition: e.target.value } : element
+      )
+    );
+  };
+
+  const handleSaveChanges = async (id: number) => {
+    const updatedElement = editedElements.find(element => element.id === id);
+    if (updatedElement) {
+      await dispatch(
+        updateMissionElement({
+          missionId: String(currentMission?.mission.id),
+          elementId: String(updatedElement.id),
+          data: { addition: updatedElement.addition }
+        })
+      );
+      setEditedElements((prevElements) =>
+        prevElements.map((element) =>
+          element.id === id ? { ...element, isEditing: false } : element
+        )
+      );
+    }
+  };
+
+  const handleEditClick = (id: number) => {
+    setEditedElements((prevElements) =>
+      prevElements.map((element) =>
+        element.id === id ? { ...element, isEditing: true } : element
+      )
+    );
+  };
+
   const handleDeleteMission = async () => {
     if (!currentMission?.mission.id) return;
 
     try {
       // Удаляем элементы миссии
       for (const element of currentMission.elements || []) {
-        if (element.id) {
-          await dispatch(missionElementDelete({ missionId: String(currentMission.mission.id), elementId: String(element.id) }));
+        if (String(element.id)) {
+          await dispatch(
+            missionElementDelete({
+              missionId: String(currentMission.mission.id),
+              elementId: String(element.id)
+            })
+          );
         }
       }
       navigate("/");
@@ -70,7 +129,9 @@ const MissionPage: FC = () => {
   // Обработчик удаления элемента
   const handleRemoveClick = (missionId: string, elementId: string) => {
     dispatch(missionElementDelete({ missionId, elementId }));
-    setElements((prevElements) => prevElements.filter((element) => String(element.id) !== elementId));
+    setElements((prevElements) =>
+      prevElements.filter((element) => String(element.id) !== elementId)
+    );
 
     if (elements.length === 1) {
       navigate("/"); // Перенаправляем на главную страницу, если после удаления элементов их не осталось
@@ -79,26 +140,72 @@ const MissionPage: FC = () => {
 
   // Рендер элементов миссии
   const renderElements = () => {
-    return elements?.map((element) => (
-      <div className="draft-element" key={element.id}>
+    return editedElements?.map((element) => (
+      <div className="draft-element" key={String(element.id)}>
         <div className="draft-element-box">
-          <img src={element.img_url || "default-image.jpg"} className="draft-element-image" alt={element.title} />
+          <img
+            src={element.img_url || "default-image.jpg"}
+            className="draft-element-image"
+            alt={element.title}
+          />
           <span className="draft-element-title">{element.title}</span>
         </div>
         <div className="second-element-box">
-          <span className="draft-element-description">{element.short_description || '--'}</span>
-          <span className="draft-element-description">{element.short_description || '--'}</span>
-          {String(currentMission?.mission.status) === 'Введена' && (
-              <button
-                  className="delete-draft-element-btn"
-                  onClick={() => handleRemoveClick(String(currentMission?.mission.id), String(element.id))}
+          <span className="draft-element-description">
+            {element.short_description || "--"}
+          </span>
+
+          {/* Отображаем обычный текст, если не редактируется */}
+          {String(currentMission?.mission.status) !== "Введена" ? (
+            <span className="draft-element-addition">
+              {element.addition || "Комментарий отстутствует"}
+            </span>
+          ) : (
+            // Если статус "Введена", показываем поле для редактирования
+            !element.isEditing ? (
+              <span
+                className="draft-element-addition"
+                onClick={() => handleEditClick(element.id)}
               >
-              </button>
+                {element.addition || "Добавьте комментарий"}
+              </span>
+            ) : (
+              <div className="edit-addition-container">
+                <input
+                  type="text"
+                  value={element.addition || ""}
+                  onChange={(e) => handleAdditionChange(e, element.id)}
+                  className="draft-element-input"
+                />
+                <button
+                  className="save-button"
+                  onClick={() => handleSaveChanges(element.id)}
+                >
+                  Сохранить
+                </button>
+              </div>
+            )
+          )}
+
+          {/* Условие для кнопки удаления */}
+          {String(currentMission?.mission.status) === "Введена" && (
+            <button
+              className="delete-draft-element-btn"
+              onClick={() =>
+                handleRemoveClick(
+                  String(currentMission?.mission.id),
+                  String(element.id)
+                )
+              }
+            >
+            </button>
           )}
         </div>
       </div>
     ));
   };
+
+
 
   if (error) return <p>Ошибка: {error}</p>;
   if (!currentMission) return <p>Миссия не найдена</p>;
@@ -116,7 +223,7 @@ const MissionPage: FC = () => {
         <div className="mission-frame-info">{renderElements()}</div>
         <div className="card-frame-line-2"></div>
       </div>
-      {String(currentMission?.mission.status) === 'Введена' && (
+      {String(currentMission?.mission.status) === "Введена" && (
         <div className="mission-btns">
           <button className="mission-form-btn" onClick={handleFormMission}>
             <span className="mission-form-btn-text">Сформировать миссию</span>
