@@ -79,6 +79,12 @@ const ElementsEditingPage: FC = () => {
     }
   };
 
+  const handleCancelEdit = () => {
+    setEditingElement(null); // Отменяем редактирование
+    setNewElement({}); // Сбрасываем введенные данные
+    setImage(null); // Сбрасываем изображение
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewElement((prevState: any) => ({
@@ -184,9 +190,14 @@ const ElementsEditingPage: FC = () => {
                           <input type="file" onChange={handleImageUpload} />
                         </td>
                         <td>
-                          <button onClick={handleSaveEdit} disabled={loading}>
-                            {loading ? "Сохранение..." : "Сохранить изменения"}
-                          </button>
+                          <div className="d-flex gap-2">
+                            <button className="confirm-changes-btn" onClick={handleSaveEdit} disabled={loading}>
+                              {loading ? "Сохранение..." : "Сохранить изменения"}
+                            </button>
+                            <button className="reject-changes-btn" onClick={handleCancelEdit} disabled={loading}>
+                              Отменить изменения
+                            </button>
+                          </div>
                         </td>
                       </>
                     ) : (
@@ -310,6 +321,5 @@ const ElementsEditingPage: FC = () => {
     </div>
   );
 };
-
 
 export default ElementsEditingPage;

@@ -28,10 +28,6 @@
   border: none;
   cursor: pointer;
 }
-/* Стили для выравнивания кнопки по центру */
-.delete-button-container {
-
-}
 
 /* Убираем все стили с инпутов типа text */
 search.input[type="text"] {

@@ -180,12 +180,12 @@ const MissionsPage: FC = () => {
                       <td className="d-flex flex-column">
                         {String(mission.status) == "В работе" ? (
                           <>
-                            <button onClick={() => handleCompleteMission(String(mission.id))}>Завершить</button>
-                            <button onClick={() => handleRejectMission(String(mission.id))}>Отклонить</button>
-                            <button onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
+                            <button className="confirm-button mb-1 " onClick={() => handleCompleteMission(String(mission.id))}>Завершить</button>
+                            <button className="reject-button mb-1"  onClick={() => handleRejectMission(String(mission.id))}>Отклонить</button>
+                            <button className="delete-mission-button"  onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
                           </>
                         ) : (
-                          <button onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
+                          <button className="delete-mission-button" onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
                         )}
                       </td>
                     )}
