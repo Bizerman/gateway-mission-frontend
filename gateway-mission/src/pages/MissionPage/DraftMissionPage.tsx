@@ -130,7 +130,6 @@ const MissionPage: FC = () => {
     }
   };
 
-  // Обработчик удаления элемента
   const handleRemoveClick = (missionId: string, elementId: string) => {
     dispatch(missionElementDelete({ missionId, elementId }))
       .then(() => {
@@ -153,13 +152,11 @@ const MissionPage: FC = () => {
       })
       .catch((error) => {
         console.error("Ошибка при удалении элемента: ", error);
-        // Можно добавить уведомление или обработку ошибки
       });
   };
 
 
 
-  // Рендер элементов миссии
   const renderElements = () => {
     return editedElements?.map((element) => (
       <div className="draft-element" key={String(element.id)}>
@@ -228,8 +225,8 @@ const MissionPage: FC = () => {
 
 
 
-  if (error) return <p>Ошибка: {error}</p>;
-  if (!currentMission) return <p>Миссия не найдена</p>;
+  if (error) return <h2 className="d-flex justify-content-center align-items-center vw-100">Ошибка: {error}</h2>;
+  if (!currentMission) return <h2 className= "d-flex justify-content-center align-items-center vw-100">Миссия не найдена</h2>;
 
   return (
     <div className="mission-page-content">

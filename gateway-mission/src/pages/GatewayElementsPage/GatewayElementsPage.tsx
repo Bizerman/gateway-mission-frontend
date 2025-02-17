@@ -14,7 +14,7 @@ const GatewayElementsPage: FC = () => {
   const { elements = [], draft_element_count, draft_mission_id, searchValue = '', error } = useSelector(
     (state: RootState) => state.gateway || {}
   );
-  const { isAuthenticated } = useSelector((state: RootState) => state.user);
+  const { isAuthenticated, role } = useSelector((state: RootState) => state.user);  // Добавляем роль пользователя
   const missionsImage = Rocket_img || "http://127.0.0.1:9000/img-for-rip/images/rocket.png";
 
   const [showToast, setShowToast] = useState(false);
@@ -58,12 +58,19 @@ const GatewayElementsPage: FC = () => {
       <div className="content-head">
         <span className="gateway-products-title">Космические корабли и модули</span>
         <div className="orders-search">
-          <ElementSearchBar
-            value={searchValue}
-            setValue={(value: string) => dispatch(setSearchValue(value))}
-            onSubmit={handleSearch}
-            placeholder="НАЙТИ..."
-          />
+          <div className='d-flex flex-column'>
+            <ElementSearchBar
+              value={searchValue}
+              setValue={(value: string) => dispatch(setSearchValue(value))}
+              onSubmit={handleSearch}
+              placeholder="НАЙТИ..."
+            />
+            {(role === "admin" || role === "moderator") && (
+              <Link to="/elements/edit">
+                <button className="edit-elements-btn">Редактировать элементы</button>
+              </Link>
+            )}
+          </div>
           {isAuthenticated && draft_element_count > 0 ? (
             <Link to={`/mission/${draft_mission_id}`}>
               <div className="missions-active">
@@ -81,6 +88,7 @@ const GatewayElementsPage: FC = () => {
               </div>
             </div>
           )}
+
         </div>
       </div>
 
@@ -95,7 +103,6 @@ const GatewayElementsPage: FC = () => {
           <p className="txt">Нет доступных продуктов</p>
         )}
       </div>
-
       {/* Всплывающее уведомление */}
       {showToast && (
         <div className={`toast-container-custom ${toastType === "success" ? "bg-success" : "bg-warning"}`}>

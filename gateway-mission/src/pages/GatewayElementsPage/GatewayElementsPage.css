@@ -1,7 +1,11 @@
 a {
   text-decoration: none !important;
 }
-
+.edit-elements-btn{
+  font-family: Play,sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}
 .gateway-products-page-content {
   width: 100vw;
   display: flex;

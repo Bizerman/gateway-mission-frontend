@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
 import { fetchMissions } from "../../store/slices/MissionDraftSlice";
 import { useNavigate } from "react-router-dom";
-import './MissionsPage.css';
+import './MissionsModeratorPage.css';
 
-const MissionsPage: FC = () => {
+const MissionsModeratorPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { missions, error } = useSelector((state: RootState) => state.missions);
@@ -148,4 +148,4 @@ const MissionsPage: FC = () => {
   );
 };
 
-export default MissionsPage;
+export default MissionsModeratorPage;
