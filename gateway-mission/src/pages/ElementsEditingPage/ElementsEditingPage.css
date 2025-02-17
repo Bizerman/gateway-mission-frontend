@@ -4,4 +4,75 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    margin-top: 104px;
 }
+.gateway-elements-table{
+    margin-top: 20px;
+  width: 90%;
+  padding: 0 2% 0 2%;
+}
+.gateway-elements-table-bordered
+{
+    th, td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+}
+.add-row-button-container {
+  text-align: center;
+}
+
+.full-width-button {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+}
+/* Стили для выравнивания кнопки по центру */
+.delete-button-container {
+
+}
+
+/* Убираем все стили с инпутов типа text */
+search.input[type="text"] {
+  all: unset;
+  width: 100%; /* чтобы инпуты занимали всю доступную ширину */
+}
+
+/* Дополнительные стили для кнопки "Удалить" */
+.delete-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #000000;
+}
+
+.delete-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.full-width-button {
+  padding: 10px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+
+.full-width-button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+

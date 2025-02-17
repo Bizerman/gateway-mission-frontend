@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../api";
-import {GatewayElement, GatewayElementsResp} from "../../api/Api.ts";
+import {GatewayElement, GatewayElementsResp, GatewayElementWithoutImg, RequestParams} from "../../api/Api.ts";
 
 
 export const empty_element: GatewayElement = {
@@ -21,6 +21,7 @@ const initialState: GatewayElementsResp = {
     error: null,
     element: empty_element,
 };
+
 
 export const getGatewayElementsList = createAsyncThunk(
   'elements/getGatewayElementsList',
@@ -51,6 +52,60 @@ export const getGatewayElement = createAsyncThunk(
   }
 );
 
+export const addNewGatewayElement = createAsyncThunk(
+  'gateway/addElement',
+  async (data: GatewayElementWithoutImg, { rejectWithValue }) => {
+    try {
+      const response = await api.gatewayelsList.gatewayelsListCreate(data);
+      return response.data; // Используем данные из ответа
+    } catch (error) {
+      return rejectWithValue(error); // В случае ошибки
+    }
+  }
+);
+export const deleteGatewayElement = createAsyncThunk(
+  'gateway/deleteElement',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await api.gatewayel.gatewayelDelete(id);
+      return id; // Возвращаем id удаленного элемента для обновления состояния
+    } catch (error) {
+      return rejectWithValue(error); // В случае ошибки
+    }
+  }
+);
+export const updateGatewayElement = createAsyncThunk(
+  'gateway/updateElement',
+  async ({ id, data }: { id: string; data: GatewayElementWithoutImg }, { rejectWithValue }) => {
+    try {
+      const response = await api.gatewayel.gatewayelPutUpdate(id, data);
+      return response; // Возвращаем обновленные данные
+    } catch (error) {
+      return rejectWithValue(error); // В случае ошибки
+    }
+  }
+);
+// Расширяем тип RequestParams для поддержки FormData
+interface ExtendedRequestParams extends RequestParams {
+  body?: FormData; // Разрешаем передавать FormData
+}
+
+export const uploadImage = createAsyncThunk(
+  'gateway/uploadImage',
+  async ({ id, image }: { id: string; image: File }) => {
+    const formData = new FormData();
+    formData.append('image', image); // Добавляем изображение в форму
+
+    // Передаем в запрос с расширенным типом
+    const params: ExtendedRequestParams = {
+      body: formData,
+    };
+
+    const response = await api.gatewayel.gatewayelImageCreate(id, params);
+
+    return response;
+  }
+);
 
 
 const gatewayElementsSlice = createSlice({
@@ -64,7 +119,10 @@ const gatewayElementsSlice = createSlice({
       if (state.element!=null){
         state.element.id = action.payload.id
       }
-    }
+    },
+    setElements: (state, action) => {
+      state.elements = action.payload;
+    },
   },
   extraReducers: (builder) => {
       builder
@@ -98,8 +156,58 @@ const gatewayElementsSlice = createSlice({
           .addCase(getGatewayElement.rejected, (state, action) => {
               state.loading = false;
               state.error = action.payload as string; // Сохраняем ошибку, если она была
-          });
+          })
+          .addCase(addNewGatewayElement.pending, (state) => {
+            state.loading = true;
+          })
+          .addCase(addNewGatewayElement.fulfilled, (state, action) => {
+            state.loading = false;
+            state.elements.push(action.payload); // Добавляем новый элемент в состояние
+          })
+          .addCase(addNewGatewayElement.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+          })
+          .addCase(deleteGatewayElement.pending, (state) => {
+            state.loading = true;
+          })
+          .addCase(deleteGatewayElement.fulfilled, (state, action) => {
+            state.loading = false;
+            // Удаляем элемент из массива
+            state.elements = state.elements.filter(
+              (element) => String(element.id) !== action.payload
+            );
+          })
+          .addCase(deleteGatewayElement.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+          })
+          .addCase(updateGatewayElement.pending, (state) => {
+            state.loading = true;
+          })
+          .addCase(updateGatewayElement.fulfilled, (state, action) => {
+            state.loading = false;
+            // Обновляем элемент в массиве
+            state.elements.push({
+              ...action.payload,
+              status: Boolean(action.payload.status), // Преобразуем статус в boolean
+            });
+          })
+          .addCase(updateGatewayElement.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+          })
+            .addCase(uploadImage.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(uploadImage.fulfilled, (state) => {
+              state.loading = false;
+            })
+            .addCase(uploadImage.rejected, (state, action) => {
+              state.loading = false;
+              state.error = action.error.message;
+            });
   }
 });
-export const { setSearchValue,setElementDetailId } = gatewayElementsSlice.actions;
+export const { setSearchValue,setElementDetailId,setElements  } = gatewayElementsSlice.actions;
 export default gatewayElementsSlice.reducer;

@@ -94,27 +94,30 @@ const GatewayElementsPage: FC = () => {
 
       <div className="products">
         {error ? (
-          <p className="txt">{error}</p>
+            <p className="txt">{error}</p>
         ) : elements.length > 0 ? (
-          elements.map((element) => (
-            <GatewayCard key={element.id} element={element} onAddToMission={handleAddToMission} />
-          ))
+            elements
+                .filter((element) => element.status === true) // Только элементы с активным статусом
+                .map((element) => (
+                    <GatewayCard key={element.id} element={element} onAddToMission={handleAddToMission}/>
+                ))
         ) : (
-          <p className="txt">Нет доступных продуктов</p>
+            <p className="txt">Нет доступных продуктов</p>
         )}
       </div>
+
       {/* Всплывающее уведомление */}
       {showToast && (
-        <div className={`toast-container-custom ${toastType === "success" ? "bg-success" : "bg-warning"}`}>
-          <div className="d-flex">
-            <div className="toast-body">{toastMessage}</div>
-            <button
-              type="button"
-              className="btn-close ms-2 me-2 m-auto"
-              onClick={() => setShowToast(false)}
-            >
-            </button>
-          </div>
+          <div className={`toast-container-custom ${toastType === "success" ? "bg-success" : "bg-warning"}`}>
+            <div className="d-flex">
+              <div className="toast-body">{toastMessage}</div>
+              <button
+                  type="button"
+                  className="btn-close ms-2 me-2 m-auto"
+                  onClick={() => setShowToast(false)}
+              >
+              </button>
+            </div>
         </div>
       )}
     </div>
