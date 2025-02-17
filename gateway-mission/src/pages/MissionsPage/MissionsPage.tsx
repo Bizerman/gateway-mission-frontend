@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
-import {fetchMissions, missionCompleteUpdate, missionDelete} from "../../store/slices/MissionDraftSlice";
+import { fetchMissions, missionCompleteUpdate, missionDelete } from "../../store/slices/MissionDraftSlice";
 import { useNavigate } from "react-router-dom";
 import './MissionsPage.css';
 
@@ -17,7 +17,8 @@ const MissionsPage: FC = () => {
   const [creatorFilter, setCreatorFilter] = useState<string>(''); // Фильтр по создателю
   const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null); // Состояние для выбранной миссии
 
-  useEffect(() => {
+  // Функция для получения миссий
+  const getMissions = () => {
     dispatch(fetchMissions()).unwrap().catch((err) => {
       if (err === 403) {
         navigate("/forbidden");
@@ -27,6 +28,19 @@ const MissionsPage: FC = () => {
         console.error("Ошибка:", err);
       }
     });
+  };
+
+  // Включаем short polling
+  useEffect(() => {
+    getMissions(); // Начальная загрузка миссий
+
+    // Запуск периодического обновления данных
+    const intervalId = setInterval(() => {
+      getMissions(); // Повторный запрос каждые 2 секунды
+    }, 2000);
+
+    // Очистка таймера при размонтировании компонента
+    return () => clearInterval(intervalId);
   }, [dispatch, navigate]);
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,16 +72,16 @@ const MissionsPage: FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  // Форматируем дату с временем (часы и минуты)
-  return date.toLocaleString('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
+    const date = new Date(dateString);
+    // Форматируем дату с временем (часы и минуты)
+    return date.toLocaleString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   const renderDateCell = (date: string | null | undefined) => {
     if (!date) return '--';
@@ -95,6 +109,7 @@ const MissionsPage: FC = () => {
       console.error("Ошибка при отклонении миссии:", err);
     });
   };
+
   const handleDeleteMission = (missionId: string) => {
     dispatch(missionDelete(missionId)).unwrap().catch((err) => {
       console.error("Ошибка при удалении миссии:", err);
@@ -151,30 +166,31 @@ const MissionsPage: FC = () => {
               </tr>
             </thead>
             <tbody>
-            {filteredMissions.length > 0 ? (
+              {filteredMissions.length > 0 ? (
                 filteredMissions.map((mission) => (
-                    <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
-                      <td>{renderCell(mission.id)}</td>
-                      <td>{renderCell(mission.status)}</td>
-                      <td>{renderCell(mission.creator?.username)}</td>
-                      <td>{renderDateCell(mission.create_datetime)}</td>
-                      <td>{renderDateCell(mission.form_datetime)}</td>
-                      <td>{renderDateCell(mission.complete_datetime)}</td>
-                      <td>{renderDateCell(mission.plan_date)}</td>
-                      {(role === "admin" || role === "moderator") && (
-                          <td className="d-flex flex-column">
-                            {String(mission.status) == "В работе" ? (
-                                <>
-                                  <button onClick={() => handleCompleteMission(String(mission.id))}>Завершить</button>
-                                  <button onClick={() => handleRejectMission(String(mission.id))}>Отклонить</button>
-                                  <button onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
-                                </>
-
-                            ) : (
-                              <button onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>)}
-                          </td>)}
-          </tr>
-        ))
+                  <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
+                    <td>{renderCell(mission.id)}</td>
+                    <td>{renderCell(mission.status)}</td>
+                    <td>{renderCell(mission.creator?.username)}</td>
+                    <td>{renderDateCell(mission.create_datetime)}</td>
+                    <td>{renderDateCell(mission.form_datetime)}</td>
+                    <td>{renderDateCell(mission.complete_datetime)}</td>
+                    <td>{renderDateCell(mission.plan_date)}</td>
+                    {(role === "admin" || role === "moderator") && (
+                      <td className="d-flex flex-column">
+                        {String(mission.status) == "В работе" ? (
+                          <>
+                            <button onClick={() => handleCompleteMission(String(mission.id))}>Завершить</button>
+                            <button onClick={() => handleRejectMission(String(mission.id))}>Отклонить</button>
+                            <button onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
+                          </>
+                        ) : (
+                          <button onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
+                        )}
+                      </td>
+                    )}
+                  </tr>
+                ))
               ) : (
                 <tr>
                   <td colSpan={8} className="no-missions-message">Нет доступных миссий</td>
@@ -184,13 +200,14 @@ const MissionsPage: FC = () => {
           </table>
         )}
       </div>
+
       {selectedMissionId && (
-          <div className="navigate-button-container mb-5">
-            <button onClick={handleNavigateToMission} className="navigate-button">
-              Перейти к миссии {selectedMissionId}
-            </button>
-          </div>
-        )}
+        <div className="navigate-button-container mb-5">
+          <button onClick={handleNavigateToMission} className="navigate-button">
+            Перейти к миссии {selectedMissionId}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
