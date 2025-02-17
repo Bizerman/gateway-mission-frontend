@@ -157,7 +157,7 @@ const MissionsPage: FC = () => {
               <tr>
                 <th>№</th>
                 <th>Статус</th>
-                <th>Создатель</th>
+                {(role === "admin" || role === "moderator") && <th>Создатель</th>}
                 <th>Дата создания</th>
                 <th>Дата оформления</th>
                 <th>Дата завершения</th>
@@ -171,7 +171,7 @@ const MissionsPage: FC = () => {
                   <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
                     <td>{renderCell(mission.id)}</td>
                     <td>{renderCell(mission.status)}</td>
-                    <td>{renderCell(mission.creator?.username)}</td>
+                    {(role === "admin" || role === "moderator") &&<td>{renderCell(mission.creator?.username)}</td>}
                     <td>{renderDateCell(mission.create_datetime)}</td>
                     <td>{renderDateCell(mission.form_datetime)}</td>
                     <td>{renderDateCell(mission.complete_datetime)}</td>

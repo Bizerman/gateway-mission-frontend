@@ -292,10 +292,7 @@ const ElementsEditingPage: FC = () => {
                       <option value="false">Неактивен</option>
                     </select>
                   </td>
-                  <td>
-                    <input type="file" onChange={handleImageUpload} />
-                  </td>
-                  <td>
+                  <td colSpan={2}>
                     <button onClick={handleSaveNewRow} disabled={loading}>
                       {loading ? "Добавление..." : "Добавить элемент"}
                     </button>
