@@ -243,10 +243,10 @@ const draftMissionSlice = createSlice({
         state.missions = state.missions.filter((mission) => String(mission.id) !== action.payload.id);
       })
       .addCase(missionCompleteUpdate.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = String(action.payload);
       })
       .addCase(missionDelete.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = String(action.payload);
       });
   }
 });
