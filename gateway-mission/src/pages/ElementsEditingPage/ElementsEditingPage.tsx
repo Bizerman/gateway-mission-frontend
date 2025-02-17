@@ -52,7 +52,7 @@ const ElementsEditingPage: FC = () => {
       title: newElement.title,
       short_description: newElement.short_description,
       full_description: newElement.full_description,
-      status: Boolean(newElement.status), // Преобразуем строку в boolean
+      status: Boolean(newElement.status),
     };
 
     if (editingElement) {
@@ -60,10 +60,8 @@ const ElementsEditingPage: FC = () => {
       dispatch(updateGatewayElement({ id: editingElement.id, data })).then(() => {
         // Проверяем, что изображение было выбрано
         if (image) {
-          const formData = new FormData();
-          formData.append("image", image); // Добавляем изображение в FormData
-
-          dispatch(uploadImage({ id: editingElement.id, image: formData })).then(() => {
+          // Отправляем только сам файл
+          dispatch(uploadImage({ id: editingElement.id, image: image })).then(() => {
             dispatch(getGatewayElementsList()); // Перезагружаем список элементов
             setEditingElement(null);
             setNewElement({});
@@ -102,6 +100,7 @@ const ElementsEditingPage: FC = () => {
   };
 
   const handleCellClick = (element: any, field: string) => {
+    console.log(field)
     setEditingElement(element); // Включаем режим редактирования для этого элемента
     setNewElement({
       title: element.title,

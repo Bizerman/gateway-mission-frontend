@@ -1,14 +1,22 @@
 .mission-page-content {
-  width: 100%;
-  height: auto;
+  width: 100vw;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  margin-top: 104px;
+  overflow: hidden;
+}
+.mission-content{
+  display: flex;
   align-items: center;
   align-content: center;
+  flex-direction: column;
   gap:60px;
+  margin-bottom: 5%;
+}
+.breadcrumbs{
   position: absolute;
-  top: 148px;
-  overflow: hidden;
+  top: 100px;
 }
 .mission-title {
   width: 100%;

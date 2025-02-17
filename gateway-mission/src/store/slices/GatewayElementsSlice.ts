@@ -94,7 +94,7 @@ export const uploadImage = createAsyncThunk(
   'gateway/uploadImage',
   async ({ id, image }: { id: string; image: File }) => {
     const formData = new FormData();
-    formData.append('image', image); // Добавляем изображение в форму
+    formData.append('img', image); // Убедитесь, что ключ 'img', как на сервере
 
     // Передаем в запрос с расширенным типом
     const params: ExtendedRequestParams = {
@@ -106,6 +106,7 @@ export const uploadImage = createAsyncThunk(
     return response;
   }
 );
+
 
 
 const gatewayElementsSlice = createSlice({

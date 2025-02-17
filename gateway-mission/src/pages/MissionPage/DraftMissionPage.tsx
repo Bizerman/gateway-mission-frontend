@@ -9,6 +9,7 @@ import {
   updateMissionForm
 } from "../../store/slices/MissionDraftSlice";
 import { getGatewayElement } from "../../store/slices/GatewayElementsSlice";
+import { BreadCrumbs } from "../../components/BreadCrumbs";  // Импортируем компонент хлебных крошек
 import "./DraftMissionPage.css";
 
 const MissionPage: FC = () => {
@@ -31,7 +32,17 @@ const MissionPage: FC = () => {
 
   useEffect(() => {
     if (mission_id) {
-      dispatch(fetchMissionById(mission_id));
+      dispatch(fetchMissionById(mission_id)).unwrap().catch((err) => {
+      // Перехватываем ошибку и перенаправляем в зависимости от статуса
+      if (err === 403) {
+        navigate("/forbidden");
+      } else if (err === 404) {
+        navigate("/*");
+      } else {
+        // Если ошибка не 403 или 404, показываем ошибку
+        console.error("Ошибка:", err);
+      }
+    });
     }
   }, [dispatch, mission_id]);
 
@@ -57,9 +68,6 @@ const MissionPage: FC = () => {
     }
   }, [dispatch, currentMission]);
 
-
-
-
   const handleAdditionChange = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
     setEditedElements((prevElements) =>
       prevElements.map((element) =>
@@ -69,10 +77,8 @@ const MissionPage: FC = () => {
   };
 
   const handleSaveChanges = async (id: number) => {
-    // Убедитесь, что элемент в editedElements существует
     const updatedElement = editedElements.find(element => element.id === id);
     if (updatedElement) {
-      // Сохраняем изменения
       await dispatch(
         updateMissionElement({
           missionId: String(currentMission?.mission.id),
@@ -81,7 +87,6 @@ const MissionPage: FC = () => {
         })
       );
 
-      // После сохранения изменений, синхронизируем editedElements, убираем флаг редактирования
       setEditedElements((prevElements) =>
         prevElements.map((element) =>
           element.id === id ? { ...element, isEditing: false } : element
@@ -102,7 +107,6 @@ const MissionPage: FC = () => {
     if (!currentMission?.mission.id) return;
 
     try {
-      // Удаляем элементы миссии
       for (const element of currentMission.elements || []) {
         if (String(element.id)) {
           await dispatch(
@@ -119,7 +123,6 @@ const MissionPage: FC = () => {
     }
   };
 
-  // Обработчик для формирования миссии
   const handleFormMission = async () => {
     if (!currentMission?.mission.id) return;
     try {
@@ -133,19 +136,16 @@ const MissionPage: FC = () => {
   const handleRemoveClick = (missionId: string, elementId: string) => {
     dispatch(missionElementDelete({ missionId, elementId }))
       .then(() => {
-        // Обновляем состояние elements
         const updatedElements = elements.filter(
           (element) => String(element.id) !== elementId
         );
         setElements(updatedElements);
 
-        // Обновляем состояние editedElements, чтобы оно также синхронизировалось
         const updatedEditedElements = editedElements.filter(
           (element) => String(element.id) !== elementId
         );
         setEditedElements(updatedEditedElements);
 
-        // Если после удаления элементов остался только один, перенаправляем
         if (updatedElements.length === 0) {
           navigate("/");
         }
@@ -154,8 +154,6 @@ const MissionPage: FC = () => {
         console.error("Ошибка при удалении элемента: ", error);
       });
   };
-
-
 
   const renderElements = () => {
     return editedElements?.map((element) => (
@@ -173,13 +171,11 @@ const MissionPage: FC = () => {
             {element.short_description || "--"}
           </span>
           <div className="third-element-box">
-            {/* Отображаем обычный текст, если не редактируется */}
             {String(currentMission?.mission.status) !== "Введена" ? (
               <span className="draft-element-addition">
                 {element.addition || "Комментарий отсутствует"}
               </span>
             ) : (
-              // Если статус "Введена", показываем поле для редактирования
               !element.isEditing ? (
                 <span
                   className="draft-element-addition"
@@ -204,7 +200,6 @@ const MissionPage: FC = () => {
                 </div>
               )
             )}
-            {/* Условие для кнопки удаления */}
             {String(currentMission?.mission.status) === "Введена" && (
               <button
                 className="delete-draft-element-btn"
@@ -223,35 +218,45 @@ const MissionPage: FC = () => {
     ));
   };
 
-
-
   if (error) return <h2 className="d-flex justify-content-center align-items-center vw-100">Ошибка: {error}</h2>;
-  if (!currentMission) return <h2 className= "d-flex justify-content-center align-items-center vw-100">Миссия не найдена</h2>;
+  if (!currentMission) return <h2 className="d-flex justify-content-center align-items-center vw-100">Миссия не найдена</h2>;
 
   return (
-    <div className="mission-page-content">
-      <span className="mission-title">Миссия</span>
-      <div className="mission-info">
-        <div className="mission-frame-title">
-          <span className="draft-element-column-title">Объект</span>
-          <span className="draft-element-column-description">Описание</span>
-          <span className="draft-element-column-description">Комментарий</span>
-          <div className="card-frame-line-1"></div>
+      <div className="mission-page-content">
+        {/* Отображаем хлебные крошки, если миссия не черновик */}
+        {String(currentMission?.mission.status) !== "Введена" && (
+            <BreadCrumbs
+              crumbs={[{
+                label: "Миссия " + String(currentMission.mission.id) || "Миссия",
+                path: `/mission/${mission_id}`
+              }]}
+              isMissionPage={true}
+            />
+        )}
+        <div className="mission-content">
+          <span className="mission-title">Миссия</span>
+          <div className="mission-info">
+            <div className="mission-frame-title">
+              <span className="draft-element-column-title">Объект</span>
+              <span className="draft-element-column-description">Описание</span>
+              <span className="draft-element-column-description">Комментарий</span>
+              <div className="card-frame-line-1"></div>
+            </div>
+            <div className="mission-frame-info">{renderElements()}</div>
+            <div className="card-frame-line-2"></div>
+          </div>
+          {String(currentMission?.mission.status) === "Введена" && (
+              <div className="mission-btns">
+                <button className="mission-form-btn" onClick={handleFormMission}>
+                  <span className="mission-form-btn-text">Сформировать миссию</span>
+                </button>
+                <button className="mission-del-btn" onClick={handleDeleteMission}>
+                  <span className="mission-del-btn-text">Удалить миссию</span>
+                </button>
+              </div>
+          )}
         </div>
-        <div className="mission-frame-info">{renderElements()}</div>
-        <div className="card-frame-line-2"></div>
       </div>
-      {String(currentMission?.mission.status) === "Введена" && (
-        <div className="mission-btns">
-          <button className="mission-form-btn" onClick={handleFormMission}>
-            <span className="mission-form-btn-text">Сформировать миссию</span>
-          </button>
-          <button className="mission-del-btn" onClick={handleDeleteMission}>
-            <span className="mission-del-btn-text">Удалить миссию</span>
-          </button>
-        </div>
-      )}
-    </div>
   );
 };
 

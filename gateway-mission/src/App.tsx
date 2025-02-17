@@ -9,13 +9,14 @@ import {useEffect} from "react";
 import {invoke} from "@tauri-apps/api/core";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import DraftMissionPage from "./pages/MissionPage/DraftMissionPage.tsx";
-import MissionsUserPage from "./pages/MissionsUserPage/MissionsUserPage.tsx";
+import MissionsPage from "./pages/MissionsPage/MissionsPage.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import ProfileUpdatePage from "./pages/ProfileUpdatePage/ProfileUpdatePage.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "./store/store.ts";
-import MissionsModeratorPage from "./pages/MissionsModeratorPage/MissionsModeratorPage.tsx";
 import ElementsEditingPage from "./pages/ElementsEditingPage/ElementsEditingPage.tsx";
+import Forbidden from "./pages/403-404/403.tsx";
+import NotFound from "./pages/403-404/404.tsx";
 
 
 
@@ -38,15 +39,10 @@ function App() {
               <Routes>
                   <Route path={ROUTES.HOME} index element={<HomePage />} />
                   <Route path={ROUTES.GATEWAY_ELEMENTS} element={<GatewayElementsPage />} />
-                    {(role !== "admin" && role !== "moderator") && (
-                      <>
-                        <Route path={ROUTES.MISSIONS} element={<MissionsUserPage />} />
-                      </>
-                    )}
+                  <Route path={ROUTES.MISSIONS} element={<MissionsPage />} />
                     {(role === "admin" || role === "moderator") && (
                       <>
                         <Route path={ROUTES.ELEMENTS_EDITION} element={<ElementsEditingPage />} />
-                        <Route path={ROUTES.MISSIONS} element={<MissionsModeratorPage />} />
                       </>
                     )}
                     <Route path={ROUTES.GATEWAY_ELEMENT_DETAIL} element={<ElementPage />} />
@@ -54,6 +50,8 @@ function App() {
                     <Route path={ROUTES.LOGIN} element={<LoginPage />} />
                     <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
                     <Route path={ROUTES.PROFILE} element={<ProfileUpdatePage />} />
+                    <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
+                    <Route path={ROUTES.FORBIDDEN} element={<Forbidden />} />
               </Routes>
     </BrowserRouter>
   );

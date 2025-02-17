@@ -1,5 +1,7 @@
 export const ROUTES = {
   HOME: "/",
+  FORBIDDEN: "/forbidden",
+  NOT_FOUND: "/*",
   GATEWAY_ELEMENTS: "/elements",
   ELEMENTS_EDITION: "/elements/edit",
   GATEWAY_ELEMENT_DETAIL: "/element/:element_id",
@@ -15,6 +17,8 @@ export type RouteKeyType = keyof typeof ROUTES;
 
 export const ROUTE_LABELS: { [key in RouteKeyType]: string } = {
   HOME: "Главная",
+  FORBIDDEN: "Недостаточно прав",
+  NOT_FOUND: "Не найдено",
   GATEWAY_ELEMENTS: "Элементы",
   ELEMENTS_EDITION: "Редактирование элементов",
   GATEWAY_ELEMENT_DETAIL: "Полная информация элемента",

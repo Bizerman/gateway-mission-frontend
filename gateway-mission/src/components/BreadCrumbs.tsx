@@ -11,15 +11,18 @@ interface ICrumb {
 
 interface BreadCrumbsProps {
   crumbs: ICrumb[];
+  isMissionPage?: boolean;
 }
 
 export const BreadCrumbs: FC<BreadCrumbsProps> = (props) => {
-  const { crumbs } = props;
+  const { crumbs, isMissionPage } = props;
 
   return (
     <ul className="breadcrumbs">
       <li>
-        <Link  to={ROUTES.GATEWAY_ELEMENTS} className="elements-text">Космические корабли и модули</Link>
+        <Link to={isMissionPage ? ROUTES.MISSIONS : ROUTES.GATEWAY_ELEMENTS} className="elements-text">
+          {isMissionPage ? "Список Миссий" : "Космические корабли и модули"}
+        </Link>
       </li>
       {!!crumbs.length &&
         crumbs.map((crumb, index) => (

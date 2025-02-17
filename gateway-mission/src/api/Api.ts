@@ -100,9 +100,9 @@ export interface GatewayMission {
    */
   complete_datetime?: string | null;
   /** Модер */
-  moderator?: number | null;
+  moderator?: UpdateResponse | null;
   /** Пользователь */
-  creator?: number | null;
+  creator?: UpdateResponse | null;
   /** Комментарий */
   addition?: string | null;
   elements?: GatewayElementMission[];

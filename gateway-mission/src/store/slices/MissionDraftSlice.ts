@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import { api } from '../../api';
-import {GatewayAddition, GatewayMission, MissionPayload} from "../../api/Api.ts";  // Путь к API
+import {GatewayAddition, GatewayMission, MissionPayload} from "../../api/Api.ts";
+import {AxiosError} from "axios";  // Путь к API
 
 
 interface UpdateMissionElementPayload {
@@ -31,9 +32,14 @@ export const fetchMissions = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.missions.missionsList();
+      console.log(response)
       return response.data;
     } catch (error) {
-      return rejectWithValue('Ошибка при загрузке списка миссий');
+      if (error instanceof AxiosError) {
+        const status = error.response?.status; // Получаем статус из ответа, если он есть
+        return rejectWithValue(status || 'Ошибка при загрузке списка миссий');
+      }
+      return rejectWithValue('Неизвестная ошибка');
     }
   }
 );
@@ -45,7 +51,11 @@ export const fetchMissionById = createAsyncThunk(
       const response = await api.mission.missionRead(id);
       return response.data;
     } catch (error) {
-      return rejectWithValue('Ошибка при загрузке миссии');
+      if (error instanceof AxiosError) {
+        const status = error.response?.status; // Получаем статус из ответа, если он есть
+        return rejectWithValue(status || 'Ошибка при загрузке списка миссий');
+      }
+      return rejectWithValue('Неизвестная ошибка');
     }
   }
 );
@@ -177,7 +187,6 @@ const draftMissionSlice = createSlice({
         // Найдем миссию по ID
         const mission = state.currentMission
 
-        console.log(mission)
         if (mission && mission.elements) {
           // Удаляем элемент из массива элементов
           mission.elements = mission.elements.filter((element) => Number(element.id) !== Number(elementId));

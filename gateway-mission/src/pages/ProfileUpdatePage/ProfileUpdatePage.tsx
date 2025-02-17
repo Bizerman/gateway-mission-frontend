@@ -15,9 +15,15 @@ const EditProfilePage: React.FC = () => {
   const { draft_mission_id } = useSelector(
     (state: RootState) => state.gateway
   );
-  const { id, username, email, first_name, last_name, isLoading, error, success } = useSelector(
+  const { id, username, email, first_name, last_name, isLoading, error, success ,isAuthenticated} = useSelector(
     (state: RootState) => state.user
   );
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/forbidden');  // Перенаправление на страницу 403
+    }
+  }, [isAuthenticated, navigate]);
 
   const [formData, setFormData] = useState({
     username: username || '',
