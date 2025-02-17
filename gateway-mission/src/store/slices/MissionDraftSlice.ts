@@ -107,6 +107,34 @@ export const missionElementDelete = createAsyncThunk(
     }
   }
 );
+// Обновление статуса миссии
+  export const missionCompleteUpdate = createAsyncThunk(
+    "missions/completeUpdate",
+    async ({ id, data }: { id: string; data: { status: 1 | 2 | 3 | 4 | 5 } }, { rejectWithValue }) => {
+      try {
+        console.log("Complete mission:", { id, data });
+        const response = await api.mission.missionCompleteUpdate(id, data);
+        return response;
+      } catch (error) {
+        return rejectWithValue("Ошибка при завершении миссии");
+      }
+    }
+  );
+
+
+// Удаление миссии
+export const missionDelete = createAsyncThunk(
+  "missions/delete",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      console.log("Delete mission:", { id });
+      await api.mission.missionDelete(id);
+      return { id }; // Возвращаем ID удаленной миссии
+    } catch (error) {
+      return rejectWithValue("Ошибка при удалении миссии");
+    }
+  }
+);
 
 // Слайс для миссий
 const draftMissionSlice = createSlice({
@@ -195,8 +223,31 @@ const draftMissionSlice = createSlice({
       .addCase(missionElementDelete.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Неизвестная ошибка';
+      })
+      .addCase(missionCompleteUpdate.fulfilled, (state, action) => {
+        // Обновление состояния после успешного завершения или отклонения миссии
+        const updatedMission = action.payload;
+        const index = state.missions.findIndex((mission) => mission.id === Number(updatedMission.data.id)); // приводим id к числовому типу
+        if (index !== -1) {
+          // Обновляем статус, дату завершения и дату планирования
+          state.missions[index] = {
+            ...state.missions[index],
+            status: updatedMission.data.status, // Обновляем статус
+            complete_datetime: updatedMission.data.complete_datetime, // Обновляем дату завершения
+            plan_date: updatedMission.data.plan_date, // Обновляем дату планирования
+          };
+        }
+      })
+      .addCase(missionDelete.fulfilled, (state, action) => {
+        // Удаление миссии из состояния
+        state.missions = state.missions.filter((mission) => String(mission.id) !== action.payload.id);
+      })
+      .addCase(missionCompleteUpdate.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(missionDelete.rejected, (state, action) => {
+        state.error = action.payload;
       });
-
   }
 });
 
