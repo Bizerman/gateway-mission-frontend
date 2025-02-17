@@ -98,7 +98,7 @@
   font-family: Play,sans-serif;
   font-weight: normal;
   font-size: 32px;
-  margin-right: 13%;
+  margin-right: 160px;
   opacity: 1;
   text-align: center;
 }
@@ -135,13 +135,12 @@
   align-items: center;
 }
 .draft-element-addition{
-  width: 25%;
+  word-break: break-word;
   font-family: Play, sans-serif;
   font-weight: normal;
   font-size: 20px;
   text-align: center;
 }
-
 
 .mission-frame-info {
   width: 1366px;
@@ -156,7 +155,7 @@
   display: flex;
   flex-direction: row;
   margin-top: 1%;
-  gap: 5%;
+  gap: 50px;
   padding-left: 53px;
 
 }
@@ -208,12 +207,20 @@
 }
 .second-element-box{
   display: flex;
-  gap: 5%;
+  gap: 50px;
   align-items: center;
 }
-
+.third-element-box{
+  display: flex;
+  width: 250px;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  text-align: center;
+}
 .draft-element-description{
-  width: 25%;
+  width: 350px;
   height: 100%;
   color: rgba(0,0,0,1);
   font-family: Play,sans-serif;
@@ -279,9 +286,12 @@
   background-size: 47px 47px;
   background-position: center;
   background-repeat: no-repeat;
+  position: absolute;
+  right: 13%;
   width: 47px;
   height: 47px;
   border-radius: 12px;
   text-align: center;
   display: inline-block; /* Добавлено для корректного отображения кнопки */
 }
+

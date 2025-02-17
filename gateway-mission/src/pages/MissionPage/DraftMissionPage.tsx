@@ -139,7 +139,7 @@ const MissionPage: FC = () => {
   };
 
   // Рендер элементов миссии
-  const renderElements = () => {
+    const renderElements = () => {
     return editedElements?.map((element) => (
       <div className="draft-element" key={String(element.id)}>
         <div className="draft-element-box">
@@ -154,7 +154,7 @@ const MissionPage: FC = () => {
           <span className="draft-element-description">
             {element.short_description || "--"}
           </span>
-
+          <div className="third-element-box">
           {/* Отображаем обычный текст, если не редактируется */}
           {String(currentMission?.mission.status) !== "Введена" ? (
             <span className="draft-element-addition">
@@ -178,7 +178,7 @@ const MissionPage: FC = () => {
                   className="draft-element-input"
                 />
                 <button
-                  className="save-button"
+                  className="mt-3"
                   onClick={() => handleSaveChanges(element.id)}
                 >
                   Сохранить
@@ -200,6 +200,7 @@ const MissionPage: FC = () => {
             >
             </button>
           )}
+          </div>
         </div>
       </div>
     ));
