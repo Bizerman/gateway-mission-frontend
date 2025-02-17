@@ -69,8 +69,10 @@ const MissionPage: FC = () => {
   };
 
   const handleSaveChanges = async (id: number) => {
+    // Убедитесь, что элемент в editedElements существует
     const updatedElement = editedElements.find(element => element.id === id);
     if (updatedElement) {
+      // Сохраняем изменения
       await dispatch(
         updateMissionElement({
           missionId: String(currentMission?.mission.id),
@@ -78,6 +80,8 @@ const MissionPage: FC = () => {
           data: { addition: updatedElement.addition }
         })
       );
+
+      // После сохранения изменений, синхронизируем editedElements, убираем флаг редактирования
       setEditedElements((prevElements) =>
         prevElements.map((element) =>
           element.id === id ? { ...element, isEditing: false } : element
@@ -128,18 +132,35 @@ const MissionPage: FC = () => {
 
   // Обработчик удаления элемента
   const handleRemoveClick = (missionId: string, elementId: string) => {
-    dispatch(missionElementDelete({ missionId, elementId }));
-    setElements((prevElements) =>
-      prevElements.filter((element) => String(element.id) !== elementId)
-    );
+    dispatch(missionElementDelete({ missionId, elementId }))
+      .then(() => {
+        // Обновляем состояние elements
+        const updatedElements = elements.filter(
+          (element) => String(element.id) !== elementId
+        );
+        setElements(updatedElements);
 
-    if (elements.length === 1) {
-      navigate("/"); // Перенаправляем на главную страницу, если после удаления элементов их не осталось
-    }
+        // Обновляем состояние editedElements, чтобы оно также синхронизировалось
+        const updatedEditedElements = editedElements.filter(
+          (element) => String(element.id) !== elementId
+        );
+        setEditedElements(updatedEditedElements);
+
+        // Если после удаления элементов остался только один, перенаправляем
+        if (updatedElements.length === 0) {
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.error("Ошибка при удалении элемента: ", error);
+        // Можно добавить уведомление или обработку ошибки
+      });
   };
 
+
+
   // Рендер элементов миссии
-    const renderElements = () => {
+  const renderElements = () => {
     return editedElements?.map((element) => (
       <div className="draft-element" key={String(element.id)}>
         <div className="draft-element-box">
@@ -155,51 +176,50 @@ const MissionPage: FC = () => {
             {element.short_description || "--"}
           </span>
           <div className="third-element-box">
-          {/* Отображаем обычный текст, если не редактируется */}
-          {String(currentMission?.mission.status) !== "Введена" ? (
-            <span className="draft-element-addition">
-              {element.addition || "Комментарий отстутствует"}
-            </span>
-          ) : (
-            // Если статус "Введена", показываем поле для редактирования
-            !element.isEditing ? (
-              <span
-                className="draft-element-addition"
-                onClick={() => handleEditClick(element.id)}
-              >
-                {element.addition || "Добавьте комментарий"}
+            {/* Отображаем обычный текст, если не редактируется */}
+            {String(currentMission?.mission.status) !== "Введена" ? (
+              <span className="draft-element-addition">
+                {element.addition || "Комментарий отсутствует"}
               </span>
             ) : (
-              <div className="edit-addition-container">
-                <input
-                  type="text"
-                  value={element.addition || ""}
-                  onChange={(e) => handleAdditionChange(e, element.id)}
-                  className="draft-element-input"
-                />
-                <button
-                  className="mt-3"
-                  onClick={() => handleSaveChanges(element.id)}
+              // Если статус "Введена", показываем поле для редактирования
+              !element.isEditing ? (
+                <span
+                  className="draft-element-addition"
+                  onClick={() => handleEditClick(element.id)}
                 >
-                  Сохранить
-                </button>
-              </div>
-            )
-          )}
-
-          {/* Условие для кнопки удаления */}
-          {String(currentMission?.mission.status) === "Введена" && (
-            <button
-              className="delete-draft-element-btn"
-              onClick={() =>
-                handleRemoveClick(
-                  String(currentMission?.mission.id),
-                  String(element.id)
-                )
-              }
-            >
-            </button>
-          )}
+                  {element.addition || "Добавьте комментарий"}
+                </span>
+              ) : (
+                <div className="edit-addition-container">
+                  <input
+                    type="text"
+                    value={element.addition || ""}
+                    onChange={(e) => handleAdditionChange(e, element.id)}
+                    className="draft-element-input"
+                  />
+                  <button
+                    className="mt-3"
+                    onClick={() => handleSaveChanges(element.id)}
+                  >
+                    Сохранить
+                  </button>
+                </div>
+              )
+            )}
+            {/* Условие для кнопки удаления */}
+            {String(currentMission?.mission.status) === "Введена" && (
+              <button
+                className="delete-draft-element-btn"
+                onClick={() =>
+                  handleRemoveClick(
+                    String(currentMission?.mission.id),
+                    String(element.id)
+                  )
+                }
+              >
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ interface UpdateMissionElementPayload {
 interface MissionState {
   missions: GatewayMission[];
   currentMission:MissionPayload | null;
+  isEditing: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -19,6 +20,7 @@ interface MissionState {
 const initialState: MissionState = {
   missions: [],
   currentMission:null,
+  isEditing: false,
   loading: false,
   error: null,
 };
@@ -71,26 +73,25 @@ export const updateMissionForm = createAsyncThunk(
   }
 );
 
-  export const updateMissionElement = createAsyncThunk(
-    'missions/updateMissionElement',
-    async ({ missionId, elementId, data }: { missionId: string; elementId: string; data: GatewayAddition }, { rejectWithValue }) => {
-      try {
-        console.log("Update mission element:", { missionId, elementId, data });
-        await api.mission.missionElementUpdate(missionId, elementId, data);
-        return { elementId, data }; // Возвращаем данные с элементом
-      } catch (error) {
-        return rejectWithValue('Ошибка при обновлении элемента миссии');
-      }
+export const updateMissionElement = createAsyncThunk(
+  'missions/updateMissionElement',
+  async ({ missionId, elementId, data }: { missionId: string; elementId: string; data: GatewayAddition }, { rejectWithValue }) => {
+    try {
+      console.log("Update mission element:", { missionId, elementId, data });
+      await api.mission.missionElementUpdate(missionId, elementId, data);
+      return { elementId, data }; // Возвращаем данные с элементом
+    } catch (error) {
+      return rejectWithValue('Ошибка при обновлении элемента миссии');
     }
-  );
+  }
+);
 // Функция для удаления элемента миссии через API
 export const missionElementDelete = createAsyncThunk(
   'missions/missionElementDelete',
   async ({ missionId, elementId }: { missionId: string; elementId: string }) => {
     try {
-      // Отправляем запрос на удаление элемента
       await api.mission.missionElementDelete(missionId,elementId)
-      return { missionId, elementId }; // возвращаем данные для обновления состояния
+      return { missionId, elementId };
     } catch (error: any) {
       throw new Error('Ошибка при удалении элемента миссии');
     }
@@ -171,17 +172,15 @@ const draftMissionSlice = createSlice({
       })
       .addCase(missionElementDelete.fulfilled, (state, action) => {
         state.loading = false;
-        const { missionId, elementId } = action.payload;
-
-        // Преобразуем missionId в число, если оно строка
-        const missionIdNumber = Number(missionId);
+        const { elementId } = action.payload;
 
         // Найдем миссию по ID
-        const mission = state.missions.find((mission) => mission.id === missionIdNumber);
+        const mission = state.currentMission
 
+        console.log(mission)
         if (mission && mission.elements) {
           // Удаляем элемент из массива элементов
-          mission.elements = mission.elements.filter((element) => Number(element.element_id) !== Number(elementId));
+          mission.elements = mission.elements.filter((element) => Number(element.id) !== Number(elementId));
         }
       })
       .addCase(missionElementDelete.rejected, (state, action) => {
