@@ -65,7 +65,7 @@ const GatewayElementsPage: FC = () => {
               onSubmit={handleSearch}
               placeholder="НАЙТИ..."
             />
-            {(role === "admin" || role === "moderator") && (
+            {(role === "admin" || role === "operator") && (
               <Link to="/elements/edit">
                 <button className="edit-elements-btn">Редактировать элементы</button>
               </Link>

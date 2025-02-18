@@ -40,7 +40,7 @@ function App() {
                   <Route path={ROUTES.HOME} index element={<HomePage />} />
                   <Route path={ROUTES.GATEWAY_ELEMENTS} element={<GatewayElementsPage />} />
                   <Route path={ROUTES.MISSIONS} element={<MissionsPage />} />
-                    {(role === "admin" || role === "moderator") && (
+                    {(role === "admin" || role === "operator") && (
                       <>
                         <Route path={ROUTES.ELEMENTS_EDITION} element={<ElementsEditingPage />} />
                       </>

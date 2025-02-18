@@ -25,7 +25,7 @@
 .usage-btns{
   display: flex;
   gap: 7%;
-  width: 450px;
+  width: 250px;
   justify-content: center;
   align-items: center;
 }
@@ -77,4 +77,49 @@
 .logout-btn{
   background:transparent !important;
   padding: 0 !important;
+}
+@media (max-width: 1024px) {
+  .head {
+    height: 90px;
+    padding: 0 15px;
+    justify-content: space-between;
+  }
+
+  .nav-links {
+    gap: 30px;
+  }
+  .usage-btns{
+    width: 100px;
+  }
+  .home-btn-container{
+    width: 200px;
+  }
+
+
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+  .head {
+    height: auto;
+    padding: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .nav-links {
+    gap: 30px;
+  }
+  .usage-btns{
+    width: 100px;
+  }
+  .home-btn-container{
+    width: 200px;
+  }
+  .home-btn-line{
+    top: 60px;
+    width: 29px;
+    margin-left: 10px;
+  }
+
+
 }

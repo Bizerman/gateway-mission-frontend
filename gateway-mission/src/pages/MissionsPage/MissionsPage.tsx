@@ -131,7 +131,7 @@ const MissionsPage: FC = () => {
               <option value="Отклонена">Отклонена</option>
             </select>
           </div>
-          {role === "admin" || role === "moderator" ? (
+          {role === "admin" || role === "operator" ? (
             <div className='missions-creator-filter d-flex justify-content-center align-items-center flex-column'>
               <label className="filter-text-title" htmlFor="creator-filter">Создатель:</label>
               <input type="text" id="creator-filter" value={creatorFilter} onChange={handleCreatorChange} placeholder="Фильтр по создателю" />
@@ -157,12 +157,12 @@ const MissionsPage: FC = () => {
               <tr>
                 <th>№</th>
                 <th>Статус</th>
-                {(role === "admin" || role === "moderator") && <th>Создатель</th>}
+                {(role === "admin" || role === "operator") && <th>Создатель</th>}
                 <th>Дата создания</th>
                 <th>Дата оформления</th>
                 <th>Дата завершения</th>
                 <th>Дата планирования</th>
-                {(role === "admin" || role === "moderator") && <th>Действия</th>}
+                {(role === "admin" || role === "operator") && <th>Действия</th>}
               </tr>
             </thead>
             <tbody>
@@ -171,12 +171,12 @@ const MissionsPage: FC = () => {
                   <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
                     <td>{renderCell(mission.id)}</td>
                     <td>{renderCell(mission.status)}</td>
-                    {(role === "admin" || role === "moderator") &&<td>{renderCell(mission.creator?.username)}</td>}
+                    {(role === "admin" || role === "operator") &&<td>{renderCell(mission.creator?.username)}</td>}
                     <td>{renderDateCell(mission.create_datetime)}</td>
                     <td>{renderDateCell(mission.form_datetime)}</td>
                     <td>{renderDateCell(mission.complete_datetime)}</td>
                     <td>{renderDateCell(mission.plan_date)}</td>
-                    {(role === "admin" || role === "moderator") && (
+                    {(role === "admin" || role === "operator") && (
                       <td className="d-flex flex-column">
                         {String(mission.status) == "В работе" ? (
                           <>
