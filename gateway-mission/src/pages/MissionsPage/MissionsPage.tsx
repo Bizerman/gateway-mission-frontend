@@ -16,7 +16,7 @@ const MissionsPage: FC = () => {
   const [endDate, setEndDate] = useState<string>('');
   const [creatorFilter, setCreatorFilter] = useState<string>(''); // Фильтр по создателю
   const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null); // Состояние для выбранной миссии
-
+  const [selectedQR, setSelectedQR] = useState<string | null>(null);
   // Функция для получения миссий
   const getMissions = () => {
     dispatch(fetchMissions()).unwrap().catch((err) => {
@@ -152,8 +152,8 @@ const MissionsPage: FC = () => {
         {error ? (
           <p>{error}</p>
         ) : (
-          <table className="missions-table-bordered">
-            <thead>
+            <table className="missions-table-bordered">
+              <thead>
               <tr>
                 <th>№</th>
                 <th>Статус</th>
@@ -162,53 +162,89 @@ const MissionsPage: FC = () => {
                 <th>Дата оформления</th>
                 <th>Дата завершения</th>
                 <th>Дата планирования</th>
+                <th>QR</th>
+                {/* Добавлен новый столбец */}
                 {(role === "admin" || role === "operator") && <th>Действия</th>}
               </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
               {filteredMissions.length > 0 ? (
-                filteredMissions.map((mission) => (
-                  <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
-                    <td>{renderCell(mission.id)}</td>
-                    <td>{renderCell(mission.status)}</td>
-                    {(role === "admin" || role === "operator") &&<td>{renderCell(mission.creator?.username)}</td>}
-                    <td>{renderDateCell(mission.create_datetime)}</td>
-                    <td>{renderDateCell(mission.form_datetime)}</td>
-                    <td>{renderDateCell(mission.complete_datetime)}</td>
-                    <td>{renderDateCell(mission.plan_date)}</td>
-                    {(role === "admin" || role === "operator") && (
-                      <td className="d-flex flex-column">
-                        {String(mission.status) == "В работе" ? (
-                          <>
-                            <button className="confirm-button mb-1 " onClick={() => handleCompleteMission(String(mission.id))}>Завершить</button>
-                            <button className="reject-button mb-1"  onClick={() => handleRejectMission(String(mission.id))}>Отклонить</button>
-                            <button className="delete-mission-button"  onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
-                          </>
-                        ) : (
-                          <button className="delete-mission-button" onClick={() => handleDeleteMission(String(mission.id))}>Удалить</button>
+                  filteredMissions.map((mission) => (
+                      <tr key={mission.id} onClick={() => handleRowClick(String(mission.id))}>
+                        <td>{renderCell(mission.id)}</td>
+                        <td>{renderCell(mission.status)}</td>
+                        {(role === "admin" || role === "operator") && <td>{renderCell(mission.creator?.username)}</td>}
+                        <td>{renderDateCell(mission.create_datetime)}</td>
+                        <td>{renderDateCell(mission.form_datetime)}</td>
+                        <td>{renderDateCell(mission.complete_datetime)}</td>
+                        <td>{renderDateCell(mission.plan_date)}</td>
+
+                        {/* QR-код */}
+                        <td>
+                          {mission.qr ? (
+                              <img
+                                  src={`data:image/png;base64,${mission.qr}`}
+                                  alt="QR Code"
+                                  className="qr-code-img"
+                                  onClick={() => setSelectedQR(mission.qr)}
+                              />
+                          ) : (
+                              "—"
+                          )}
+                        </td>
+
+                        {(role === "admin" || role === "operator") && (
+                            <td className="d-flex flex-column">
+                              {String(mission.status) == "В работе" ? (
+                                  <>
+                                    <button className="confirm-button mb-1"
+                                            onClick={() => handleCompleteMission(String(mission.id))}>
+                                      Завершить
+                                    </button>
+                                    <button className="reject-button mb-1"
+                                            onClick={() => handleRejectMission(String(mission.id))}>
+                                      Отклонить
+                                    </button>
+                                    <button className="delete-mission-button"
+                                            onClick={() => handleDeleteMission(String(mission.id))}>
+                                      Удалить
+                                    </button>
+                                  </>
+                              ) : (
+                                  <button className="delete-mission-button"
+                                          onClick={() => handleDeleteMission(String(mission.id))}>
+                                    Удалить
+                                  </button>
+                              )}
+                            </td>
                         )}
-                      </td>
-                    )}
-                  </tr>
-                ))
+                      </tr>
+                  ))
               ) : (
-                <tr>
-                  <td colSpan={8} className="no-missions-message">Нет доступных миссий</td>
-                </tr>
+                  <tr>
+                    <td colSpan={9} className="no-missions-message">Нет доступных миссий</td>
+                  </tr>
               )}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
         )}
       </div>
-
-      {selectedMissionId && (
-        <div className="navigate-button-container mb-5">
-          <button onClick={handleNavigateToMission} className="navigate-button">
-            Перейти к миссии {selectedMissionId}
-          </button>
+      {selectedQR && (
+        <div className="qr-modal" onClick={() => setSelectedQR(null)}>
+          <div className="qr-modal-content">
+            <img src={`data:image/png;base64,${selectedQR}`} alt="QR Code" />
+          </div>
         </div>
       )}
+      {selectedMissionId && (
+          <div className="navigate-button-container mb-5">
+            <button onClick={handleNavigateToMission} className="navigate-button">
+              Перейти к миссии {selectedMissionId}
+            </button>
+          </div>
+      )}
     </div>
+
   );
 };
 

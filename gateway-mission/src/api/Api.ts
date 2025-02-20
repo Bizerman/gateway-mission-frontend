@@ -73,6 +73,7 @@ export interface GatewayElementMission {
 }
 
 export interface GatewayMission {
+  qr: any;
   /** ID */
   id?: number;
   /** Название миссии */
