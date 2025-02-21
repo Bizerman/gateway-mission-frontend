@@ -13,7 +13,7 @@
 - **[Pwa](https://github.com/Bizerman/gateway-mission-frontend/tree/gh-pages)** – добавление возможности работы в режиме `GitHub Pages`
 - **[Tauri](https://github.com/Bizerman/gateway-mission-frontend/tree/Tauri)** – создание простого нативного приложения на Tauri
 - **[Engenier interface](https://github.com/Bizerman/gateway-mission-frontend/tree/Engenier-Interface)** – завершение интерфейса `пользователя` в `React`
-- **[Moderator interface](https://github.com/Bizerman/gateway-mission-frontend/tree/Operator-Interface)** – завершение интерфейса `модератора` в `React`
+- **[Operator interface](https://github.com/Bizerman/gateway-mission-frontend/tree/Operator-Interface)** – завершение интерфейса `модератора` в `React`
 
 ## Установка и запуск
 
